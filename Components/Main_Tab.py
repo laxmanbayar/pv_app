@@ -1,6 +1,8 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QLabel, QLineEdit, QComboBox, QRadioButton, QPushButton, QVBoxLayout, QWidget, \
-    QTabWidget,QGroupBox
+    QTabWidget,QGroupBox,QHBoxLayout
+    
+from PyQt6.QtCore import Qt    
 from Variables import var
 
 from Components.Shell import Shell
@@ -37,9 +39,15 @@ class MainTabPage(QWidget):
         tab_widget.addTab(Base_comp_ring, "Base Comp. Ring")
         tab_widget.addTab(BOM_tab, "BOM")
 
+        
+        #Display Current Project ID/WorkOrder on top of Tab        
+        lbl_ProjectID_or_WO=QLabel(f"Project ID (WO): {var.project_id}  {var.project_name}")
+        lbl_ProjectID_or_WO.setStyleSheet('background-color:lightgreen;font:bold')
+        
 
         # Create main layout
         main_layout = QVBoxLayout()
+        main_layout.addWidget(lbl_ProjectID_or_WO,0,Qt.AlignmentFlag.AlignHCenter)
         main_layout.addWidget(tab_widget)
 
         # Set the main layout

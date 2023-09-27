@@ -169,16 +169,17 @@ class User(Base):
 # Define Project model
 class Project(Base):
     __tablename__ = "project"
-
+    id=Column(Integer,autoincrement=True)
     project_id = Column(String(50), primary_key=True)
-    project_name = Column(String(50))
-    user_staffNo = Column(String(50), ForeignKey("user.staffNo")) 
+    project_name = Column(String(50))    
+    project_note = Column(String(500)) 
+    user_staffNo = Column(String(50), ForeignKey("user.staffNo"))
     status = Column(String(50))
     user = relationship("User", back_populates="projects", foreign_keys=[user_staffNo])
     
 class Material(Base):
    __tablename__="material"
-   #id=Column(Integer)
+   #id=Column(Integer)╠
    material = Column(String(100),primary_key=True)  
    
 

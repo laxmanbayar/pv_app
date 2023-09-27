@@ -11,7 +11,8 @@ import sys
 import re
 import math
 from DataBase.DB_config import DB_config_class
-from Controller.project_controller import add_or_update_material,add_or_update_surface_area
+#from Controller.project_controller import add_or_update_material,add_or_update_surface_area
+#from Controller.project_controller import ProjectController
 from Controller.project_controller import ProjectController
 
 
@@ -706,9 +707,9 @@ class DEND_blk_type(QWidget): #Variant=BLANK TYPE
             self.change_button_color_green(self.btn_add_to_BOM)                          
             print(var.Estimation_Dict)
               #Insert/Update Database
-            _ProjectController=ProjectController()     
-            _ProjectController.add_or_update_material(item='dish end',item_name=item_name,wt=self.tb_blktype_Wt.text(),material=self.cmbbox_blktype_DEnd_Material.currentText())
-            _ProjectController.add_or_update_surface_area(item='dish end',item_name=item_name,surface_area=self.tb_blktype_Surface_area.text())   
+            _ProjectController=ProjectController(var.project_id)     
+            _ProjectController.add_update_item(item='dish end',item_name=item_name,wt=self.tb_blktype_Wt.text(),material=self.cmbbox_blktype_DEnd_Material.currentText())
+            _ProjectController.add_update_surface_area(item='dish end',item_name=item_name,surface_area=self.tb_blktype_Surface_area.text())   
         except Exception as e:
             raise e
         # end try
@@ -845,7 +846,6 @@ class DEND_crwn_petal_type(QWidget):#Variant=CROWN & PETAL TYPE
     def setUp_UI_grpbox_add_BOM(self):
         self.Vbox_layout = QVBoxLayout()
       
-        
         #Petal Dimensions
         #Horz Layout to Petal Dimension
         self.H_Box1_gb3_DEND=QHBoxLayout()
@@ -936,6 +936,7 @@ class DEND_crwn_petal_type(QWidget):#Variant=CROWN & PETAL TYPE
 
         self.grp_box3 = QGroupBox("Petal Dimensions & BOM selection")
         self.grp_box3.setLayout(self.Vbox_layout)
+        self.grp_box3.setEnabled(False)#Default Disables/Once Calc Button is pressed Enable it
  
     def setUp_UI_layout(self):
         self.Hboxlayout_gb1_gb2=QHBoxLayout()
@@ -1029,9 +1030,10 @@ class DEND_crwn_petal_type(QWidget):#Variant=CROWN & PETAL TYPE
             var.Estimation_Dict[item_name]=var.Estimation_Schema
             print(var.Estimation_Dict)
             
-            #Insert/Update Database   
-            add_or_update_material(item='dish end',item_name=item_name,wt=self.tb_wt_per_petel.text(),material=self.tb_D_end_material.text())
-            add_or_update_surface_area(item='dish end',item_name=item_name,surface_area=self.tb_D_end_Surface_Area.text())
+            #Insert/Update Database
+            _ProjectController =ProjectController()  
+            _ProjectController.add_update_item(item='dish end',item_name=item_name,wt=self.tb_wt_per_petel.text(),material=self.tb_D_end_material.text())
+            _ProjectController.add_update_surface_area(item='dish end',item_name=item_name,surface_area=self.tb_D_end_Surface_Area.text())
         except Exception as e:
             raise e    
         
@@ -1039,7 +1041,7 @@ class DEND_crwn_petal_type(QWidget):#Variant=CROWN & PETAL TYPE
         self.change_button_color_green()
 
     def update_grp_box3(self):
-        
+       self.grp_box3.setEnabled(True) 
        self.tb_A_with_allwnc.setText(str(self.PETEL_OP_PARMS_WITH_ALLWNC['A']))
        self.tb_B_with_allwnc.setText(str(self.PETEL_OP_PARMS_WITH_ALLWNC['B']))
        self.tb_SL_with_allwnc.setText(str(self.PETEL_OP_PARMS_WITH_ALLWNC['SL']))

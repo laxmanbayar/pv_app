@@ -1,7 +1,8 @@
 uname= "6209254"
 pwd="6209254"
 
-project_id="ENQ-23-09-01-00"
+project_id="WO-XXXXXX"
+project_name="XXXXX XXXXX"
 # DEND_Crn_Petal_type_Params_incld_allwnc={
 
 #     "N":"XX",
@@ -49,6 +50,10 @@ Surface_Area_Schema={
     "Surface_Area":"00"
 }
 Surface_Area_List=[]
+
+#SQLTable Object
+Estimation_Table=None
+SurfaceArea_Table=None
 
 
 

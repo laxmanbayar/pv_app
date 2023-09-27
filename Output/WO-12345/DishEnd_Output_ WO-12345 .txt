@@ -1,0 +1,55 @@
+2023-09-27 14:02:33.529396
+DEVELOPMENT OF TORISPHERICAL DISHED END PETALS
+WORKORDER No:-	WO-12345
+----------------------------------------------------------------------------------------------------
+				INPUTS
+----------------------------------------------------------------------------------------------------
+INSIDE DIA OF TORISPHERICAL DISHED END, ID (mm)			=	9300.0
+INSIDE CROWN RADIUS, ICR (mm)					=	8370.0
+INSIDE KNUCKLE RADIUS, IKR (mm)					=	1581.0
+STRAIGHT FLANGE OF DISHED END, SF (mm)				=	50.0
+THICKNESS OF PETAL, t (mm)					=	40.0
+NUMBER OF PETALS, N						=	24.0
+CROWN DIAMETER, d (mm)						=	2500.0
+STRAIGHT LENGTH IN THE DEVELOPED PETAL, SL (mm)			=	0.0
+RATIO OF STRAIGHT LENGTH TO TOTAL LENGTH, RATIO			=	0.25
+
+
+----------------------------------------------------------------------------------------------------
+				OUTPUT
+----------------------------------------------------------------------------------------------------
+BLANK DIAMETER OF CROWN (mm)/Wt.OF CROWN WITHOUT ALLOWANCES(Kg)		=	2509.34/1552.89
+BLANK DIAMETER OF CROWN (mm)/Wt.OF CROWN WITH 40.0 mm ALLOWANCES(Kg)	=	2549.34/1602.79
+CALCULATED SIZE OF SMALLER SIDE(MIN), b (mm)				=	327.25
+
+
+DIMENSION OF THE PETAL WITHOUT ALLOWANCES
+
+WIDTH ON LARGER SIDE, A (mm)					=	1222.6
+WIDTH ON SMALLER SIDE, B (mm)					=	327.25
+TOTAL LENGTH, L (mm)						=	4505.26
+LENGTH OF STRAIGHT PORTION, C (mm)				=	1126.32
+WEIGHT OF FINISHED PETAL (KG)					=	1254.58
+----------------------------------------------------------------------------------------------------
+
+
+DIMENSION OF THE PETAL INCLUDING ALLOWANCES FOR PETAL EXCEPT CLOSING PETAL
+
+WIDTH ON LARGER SIDE, A (mm)					=	1302.6
+WIDTH ON SMALLER SIDE, B (mm)					=	397.35
+TOTAL LENGTH, L (mm)						=	4585.26
+LENGTH OF STRAIGHT PORTION, C (mm)				=	1168.95
+WEIGHT OF PETAL WITH ALLOWANCE (KG)				=	1389.91
+----------------------------------------------------------------------------------------------------
+
+
+DIMENSION OF THE PETAL INCLUDING ALLOWANCES FOR CLOSING PETAL
+
+WIDTH ON LARGER SIDE, A (mm)					=	1322.6
+WIDTH ON SMALLER SIDE, B (mm)					=	417.35
+TOTAL LENGTH, L (mm)						=	4585.26
+LENGTH OF STRAIGHT PORTION, C (mm)				=	1168.95
+WEIGHT OF PETAL WITH ALLOWANCE (KG)				=	1418.71
+----------------------------------------------------------------------------------------------------
+				PROGRAM END
+----------------------------------------------------------------------------------------------------

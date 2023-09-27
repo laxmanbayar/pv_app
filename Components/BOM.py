@@ -49,7 +49,7 @@ class Estimation_Detail(QWidget):
         self.Vbox_layout_estimation.addWidget(self.estimation_table)
         self.grpbox_estimation = QGroupBox("Estimation Data")
         self.grpbox_estimation.setStyleSheet(customStyles.estimation_grpbox_style)
-        self.grpbox_estimation.setLayout(self.Vbox_layout_estimation)♦
+        self.grpbox_estimation.setLayout(self.Vbox_layout_estimation)
         
         self.Vbox_main_layout_estimation=QVBoxLayout()
         self.Vbox_main_layout_estimation.addWidget(self.grpbox_estimation)

@@ -4,15 +4,15 @@ from PyQt6 import QtCore
 from PyQt6.QtWidgets import QApplication, QLabel, QLineEdit, QComboBox, QRadioButton, QPushButton, QVBoxLayout, QHBoxLayout,QWidget, \
     QTabWidget,QGroupBox,QTableWidget,QTableWidgetItem
 from Variables import var
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt,QTimer
 import math
-from Controller.project_controller import read_estimation_table,read_surface_area_table
+#from Controller.project_controller import read_estimation_table,read_surface_area_table
 from Controller.project_controller import ProjectController
 
 
 class Tab4_BOM(QWidget):
     def __init__(self):
-        super().__init__()
+        super().__init__()        
         self.InitializeUI()
         
     def InitializeUI(self):
@@ -34,17 +34,30 @@ class Estimation_Detail(QWidget):
         self.InitializeUI()
 
     def InitializeUI(self):
-        self.estimation_table=self.setUp_estimation_table()
+        self.set_Estimation_table_layout()
+        # self.timer = QTimer()
+        # self.timer.timeout.connect(self.set_Estimation_table_layout)
+        # self.timer.start(2000)  # Update every 2 seconds
+    
+        
+    def set_Estimation_table_layout(self):
+        
+        #self.estimation_table:QTableWidget=
+        self.setUp_estimation_table()     
+        
         self.Vbox_layout_estimation=QVBoxLayout()
         self.Vbox_layout_estimation.addWidget(self.estimation_table)
         self.grpbox_estimation = QGroupBox("Estimation Data")
         self.grpbox_estimation.setStyleSheet(customStyles.estimation_grpbox_style)
-        self.grpbox_estimation.setLayout(self.Vbox_layout_estimation)
+        self.grpbox_estimation.setLayout(self.Vbox_layout_estimation)♦
         
         self.Vbox_main_layout_estimation=QVBoxLayout()
         self.Vbox_main_layout_estimation.addWidget(self.grpbox_estimation)
         self.setLayout(self.Vbox_main_layout_estimation)    
         
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.set_Estimation_table_layout)
+        self.timer.start(2000)  # Update every 2 seconds   
     
     def setUp_estimation_table(self):
         _ProjectController=ProjectController() 
@@ -71,7 +84,8 @@ class Estimation_Detail(QWidget):
                 table.setItem(row_num, col_num, item)
                 table.setColumnWidth(col_num,200)
                 
-        return table   
+        self.estimation_table=table
+        #return table   
         
         
 class SurfaceArea_Detail(QWidget):

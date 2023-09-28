@@ -16,34 +16,42 @@ class Tab4_BOM(QWidget):
         self.InitializeUI()
         
     def InitializeUI(self):
-        V_box_layout= QVBoxLayout() 
-        Estimation=Estimation_Detail()
-        SurfaceArea=SurfaceArea_Detail()
-        V_box_layout.addWidget(Estimation)
-        V_box_layout.addWidget(SurfaceArea)
+        self.V_box_layout= QVBoxLayout() 
+        
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.Refresh_Data)
+        self.timer.start(2000)  # Update every 2 seconds       
+        # self.Estimation=Estimation_Detail()
+        # self.SurfaceArea=SurfaceArea_Detail()
+        
+        
+        
 
-        V_box_main_layout=QVBoxLayout()       
-        V_box_main_layout.addLayout(V_box_layout)
+        self.V_box_main_layout=QVBoxLayout()       
+        self.V_box_main_layout.addLayout(self.V_box_layout)
        
 
-        self.setLayout(V_box_main_layout)
+        self.setLayout(self.V_box_main_layout)
+        
+    def Refresh_Data(self):
+        try:
+            self.V_box_layout.removeWidget(self.Estimation)
+            self.V_box_layout.removeWidget(self.SurfaceArea)
+        except Exception as e:
+            pass     
+        self.Estimation=Estimation_Detail()
+        self.SurfaceArea=SurfaceArea_Detail()
+        self.V_box_layout.addWidget(self.Estimation)
+        self.V_box_layout.addWidget(self.SurfaceArea)
+        
 
 class Estimation_Detail(QWidget):
     def __init__(self):
         super().__init__()
         self.InitializeUI()
 
-    def InitializeUI(self):
-        self.set_Estimation_table_layout()
-        # self.timer = QTimer()
-        # self.timer.timeout.connect(self.set_Estimation_table_layout)
-        # self.timer.start(2000)  # Update every 2 seconds
-    
-        
-    def set_Estimation_table_layout(self):
-        
-        #self.estimation_table:QTableWidget=
-        self.setUp_estimation_table()     
+    def InitializeUI(self):      
+        self.estimation_table:QTableWidget=self.setUp_estimation_table()
         
         self.Vbox_layout_estimation=QVBoxLayout()
         self.Vbox_layout_estimation.addWidget(self.estimation_table)
@@ -54,10 +62,24 @@ class Estimation_Detail(QWidget):
         self.Vbox_main_layout_estimation=QVBoxLayout()
         self.Vbox_main_layout_estimation.addWidget(self.grpbox_estimation)
         self.setLayout(self.Vbox_main_layout_estimation)    
+    
         
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.set_Estimation_table_layout)
-        self.timer.start(2000)  # Update every 2 seconds   
+    # def set_Estimation_table_layout(self):
+        
+    #     self.estimation_table:QTableWidget=self.setUp_estimation_table()
+    #     #self.setUp_estimation_table()     
+        
+    #     self.Vbox_layout_estimation=QVBoxLayout()
+    #     self.Vbox_layout_estimation.addWidget(self.estimation_table)
+    #     self.grpbox_estimation = QGroupBox("Estimation Data")
+    #     self.grpbox_estimation.setStyleSheet(customStyles.estimation_grpbox_style)
+    #     self.grpbox_estimation.setLayout(self.Vbox_layout_estimation)
+        
+    #     self.Vbox_main_layout_estimation=QVBoxLayout()
+    #     self.Vbox_main_layout_estimation.addWidget(self.grpbox_estimation)
+    #     self.setLayout(self.Vbox_main_layout_estimation)    
+        
+        
     
     def setUp_estimation_table(self):
         _ProjectController=ProjectController() 
@@ -84,8 +106,8 @@ class Estimation_Detail(QWidget):
                 table.setItem(row_num, col_num, item)
                 table.setColumnWidth(col_num,200)
                 
-        self.estimation_table=table
-        #return table   
+        #self.estimation_table=table
+        return table   
         
         
 class SurfaceArea_Detail(QWidget):
@@ -94,7 +116,7 @@ class SurfaceArea_Detail(QWidget):
         self.InitializeUI()
 
     def InitializeUI(self):
-        self.surface_area_table=self.setUp_surface_area_table()
+        self.surface_area_table:QTableWidget=self.setUp_surface_area_table()
         self.Vbox_layout_surface_area=QVBoxLayout()
         self.Vbox_layout_surface_area.addWidget(self.surface_area_table)
         self.grpbox_surface_area = QGroupBox("Surface Area Data")

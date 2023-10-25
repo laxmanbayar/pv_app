@@ -286,7 +286,7 @@ class DishEndCalc:
             "B":round(self.SWID, 2),
             "TL":round(self.ALEN2, 2),
             "SL":round(self.STLEN, 2),
-            "PETELAREA":round(self.PETLAREA1,2),
+            "PETELAREA":round(self.PETLAREA1/1000000,2),
             "PETELWT":round(self.PETLWT1),
             "MATERIAL":self.Material
         }

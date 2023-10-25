@@ -5,12 +5,14 @@ from PyQt6.QtWidgets import QApplication, QLabel, QLineEdit, QComboBox, QRadioBu
 from PyQt6.QtCore import Qt    
 from Variables import var
 
-from Components.Shell import Shell
-from Components.Base_Comp_Ring import Tab3_Base_Comp_Ring
-from Components.Shell import Tab2_Shell
+#from Components.Insert_plt_Misc import Shell
+from Components.Base_Comp_Ring import Tab_Base_Comp_Ring
+#from Components.Shell import Tab2_Shell
 #from Components.DishEnd import Tab1_DEnd
-from Components.DishEnd import Tab1_DEnd
+from Components.DishEnd import Tab_DEnd
 from Components.BOM import Tab4_BOM
+from Components.Shell import Tab_Shell
+from Components.Misc import Tab_Misc
 
 
 
@@ -21,21 +23,24 @@ class MainTabPage(QWidget):
         # Set window title and size
         self.setWindowTitle("Welcome")
         self.setGeometry(0, 0,950,800)
+        self.setFixedHeight(800)
 
         # Create tab widget
         tab_widget = QTabWidget()
 
         # Create tabs
-        DishEnd_tab = Tab1_DEnd()
-        Shell_tab=Tab2_Shell()
-        Base_comp_ring=Tab3_Base_Comp_Ring()
+        DishEnd_tab = Tab_DEnd()
+        Shell_tab=Tab_Shell()
+        Misc=Tab_Misc()
+        Base_comp_ring=Tab_Base_Comp_Ring()
         BOM_tab = Tab4_BOM()
 
         
 
         # Add tabs to the tab widget
         tab_widget.addTab(DishEnd_tab, "Dish End")
-        tab_widget.addTab(Shell_tab, "Shell-Insert Plt-Misc")
+        tab_widget.addTab(Shell_tab, "Shell")
+        tab_widget.addTab(Misc, "Misc.")
         tab_widget.addTab(Base_comp_ring, "Base Comp. Ring")
         tab_widget.addTab(BOM_tab, "BOM")
 

@@ -1,9 +1,10 @@
 
-from sqlalchemy import create_engine, Column, String, Integer, ForeignKey,insert,MetaData,Table
+from sqlalchemy import create_engine, Column, String, Integer, ForeignKey,insert,MetaData,Table,and_,func
+from sqlalchemy.sql import cast
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.declarative import declarative_base
-from DataBase.common_models import Project,User
+from DataBase.common_models import Project,User,Elbow,Skirt_Base
 from DataBase.DB_config import DB_config_class
 from Variables import var
 #from DataBase.project_specific_model import Estimation,Surface_Area
@@ -149,4 +150,24 @@ def get_current_project_details(project_id):
     except Exception as e:
         session.rollback()
             
+def Get_Elbow_Details(nps,schedule):
+    try:
+        elbow_detail=session.query(Elbow).filter(and_ (Elbow.NPS==nps , Elbow.SCHEDULE==schedule)).all()
+        return float(elbow_detail[0].WtPerMtr)
+   
+    except Exception as e:
+        session.rollback()       
+
+def Get_gusset_detail(bolt_size):
+    try:
+        #As data may not be sorted in the table
+        results = session.query(Skirt_Base).filter(cast(Skirt_Base.Bolt, Integer) >= bolt_size).all()
+        #sort the result based on Bolt columns(as data in the database table may not be sorted)
+        sorted_result = sorted(results, key=lambda x: int(x.Bolt))
+        return sorted_result[0]
+    except Exception as e:
+        print(e)
+        session.rollback()  
+    # end try
     
+            

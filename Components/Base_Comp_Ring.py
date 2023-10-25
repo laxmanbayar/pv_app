@@ -5,8 +5,9 @@ from PyQt6.QtWidgets import QApplication, QLabel, QLineEdit, QComboBox, QRadioBu
 from Variables import var
 from PyQt6.QtCore import Qt
 import math
+import Controller.project_controller as DBController
 
-class Tab3_Base_Comp_Ring(QWidget):
+class Tab_Base_Comp_Ring(QWidget):
     def __init__(self):
         super().__init__()
         self.InitializeUI()
@@ -125,49 +126,87 @@ class Base_Comp_Ring_Gusset(QWidget):
 
         self.lbl_bolt_size =QLabel("Bolt Size")
         self.tb_bolt_size =QLineEdit("32")
+        
+        self.lbl_bolt_count =QLabel("No. of Bolts")
+        self.tb_bolt_count =QLineEdit("8")
 
         self.lbl_BCD =QLabel("BCD")
         self.tb_BCD =QLineEdit("1150")
 
+
+        #Base Plt and gusset
+        self.lbl_No_of_joints_Base_plt=QLabel("No. of Joints Base Plt")
+        self.tb_No_of_joints_Base_plt=QLineEdit("4")  
+        self.lbl_thk_Base_plt=QLabel("Base Plt Thk")
+        self.tb_thk_Base_plt=QLineEdit("45")
+        
         self.lbl_gusset_thk =QLabel("Gusset Thk")
         self.tb_gusset_thk =QLineEdit("18")
-
-        self.lbl_washer_Thk=QLabel("Washer Thk")
-        self.tb_washer_Thk =QLineEdit("20")
-
+  
+        #Comp Plt nd washer
         self.lbl_Compression=QLabel("Compression")
         self.tb_Compression =QLineEdit("Ring")
+        self.lbl_No_of_joints_Comp_plt=QLabel("No. of Joints Comp Plt")       
+        self.tb_No_of_joints_Comp_plt=QLineEdit("4")  
+        self.lbl_thk_Comp_plt=QLabel("Comp Plt Thk")     
+        self.tb_thk_Comp_plt=QLineEdit("40")
+        
+        self.lbl_washer_Thk=QLabel("Washer Thk")
+        self.tb_washer_Thk =QLineEdit("20")
+        
+        
+        
+        #self.tb_thk_Comp_plt.setStyleSheet(self.ip_textbox_style)
+
 
 
 
         #Create VBox Input
-        self.VBox_layout1 =QVBoxLayout()
+        self.Input_Gridlayout =QGridLayout()
        
-        self.VBox_layout1.addWidget(self.lbl_material)
-        self.VBox_layout1.addWidget(self.cmb_box_material)
-        self.VBox_layout1.addWidget(self.lbl_density)
-        self.VBox_layout1.addWidget(self.tb_density)
-        self.VBox_layout1.addWidget(self.lbl_skirt_type)
-        self.VBox_layout1.addWidget(self.cmb_box_skirt_type)
-        self.VBox_layout1.addWidget(self.lbl_cone_angle)
-        self.VBox_layout1.addWidget(self.tb_cone_angle)
-        self.VBox_layout1.addWidget(self.lbl_BCD)
-        self.VBox_layout1.addWidget(self.tb_BCD)
-        self.VBox_layout1.addWidget(self.lbl_gusset_thk)
-        self.VBox_layout1.addWidget(self.tb_gusset_thk)
-        self.VBox_layout1.addWidget(self.lbl_washer_Thk)
-        self.VBox_layout1.addWidget(self.tb_washer_Thk)
-        self.VBox_layout1.addWidget(self.lbl_Compression)#
-        self.VBox_layout1.addWidget(self.tb_Compression)
+        self.Input_Gridlayout.addWidget(self.lbl_material,0,0)
+        self.Input_Gridlayout.addWidget(self.cmb_box_material,0,1)
+        self.Input_Gridlayout.addWidget(self.lbl_density,0,2)
+        self.Input_Gridlayout.addWidget(self.tb_density,0,3)
+        self.Input_Gridlayout.addWidget(self.lbl_skirt_type,1,0)
+        self.Input_Gridlayout.addWidget(self.cmb_box_skirt_type,1,1)
+        self.Input_Gridlayout.addWidget(self.lbl_cone_angle,1,2)
+        self.Input_Gridlayout.addWidget(self.tb_cone_angle,1,3)
+        self.Input_Gridlayout.addWidget(self.lbl_bolt_size,2,0)
+        self.Input_Gridlayout.addWidget(self.tb_bolt_size,2,1)
+        self.Input_Gridlayout.addWidget(self.lbl_bolt_count,2,2)
+        self.Input_Gridlayout.addWidget(self.tb_bolt_count,2,3)
+        self.Input_Gridlayout.addWidget(self.lbl_BCD,3,0)
+        self.Input_Gridlayout.addWidget(self.tb_BCD,3,1)
        
-        self.btn_calc_shell_wt=QPushButton("Calculate Inermediate Op")
-        self.btn_calc_shell_wt.clicked.connect(self.Calculate_Intermediate_op)
-        self.VBox_layout1.addWidget(self.btn_calc_shell_wt,0,Qt.AlignmentFlag.AlignHCenter)
+     
+        self.Input_Gridlayout.addWidget(self.lbl_No_of_joints_Base_plt,4,0)#
+        self.Input_Gridlayout.addWidget(self.tb_No_of_joints_Base_plt,4,1)
+        self.Input_Gridlayout.addWidget(self.lbl_thk_Base_plt,4,2)#
+        self.Input_Gridlayout.addWidget(self.tb_thk_Base_plt,4,3)
+        self.Input_Gridlayout.addWidget(self.lbl_gusset_thk,5,0)
+        self.Input_Gridlayout.addWidget(self.tb_gusset_thk,5,1)
+        
+        self.Input_Gridlayout.addWidget(self.lbl_Compression,6,0)#
+        self.Input_Gridlayout.addWidget(self.tb_Compression,6,1)
+        self.Input_Gridlayout.addWidget(self.lbl_No_of_joints_Comp_plt,6,2)#
+        self.Input_Gridlayout.addWidget(self.tb_No_of_joints_Comp_plt,6,3)        
+        self.Input_Gridlayout.addWidget(self.lbl_thk_Comp_plt,7,0)#
+        self.Input_Gridlayout.addWidget(self.tb_thk_Comp_plt,7,1)
+        self.Input_Gridlayout.addWidget(self.lbl_washer_Thk,7,2)
+        self.Input_Gridlayout.addWidget(self.tb_washer_Thk,7,3)
+        
+       
+        
+       
+        self.btn_calc_intrmd_op=QPushButton("Calculate Inermediate Op")
+        self.btn_calc_intrmd_op.clicked.connect(self.Calculate_Outputs)
+        self.Input_Gridlayout.addWidget(self.btn_calc_intrmd_op,8,1,Qt.AlignmentFlag.AlignHCenter)
 
         #Create a GroupBox1 and set its layout to VBox_layout1
         self.grpbox1 = QGroupBox("Input(Base Ring , Comp Ring , Gusset , Washer)",self)
         self.grpbox1.setStyleSheet(self.ip_grpbox1_style)
-        self.grpbox1.setLayout(self.VBox_layout1)
+        self.grpbox1.setLayout(self.Input_Gridlayout)
     
 
     def  SetUp_intermediate_op_GrpBox(self):
@@ -230,20 +269,12 @@ class Base_Comp_Ring_Gusset(QWidget):
         
     def SetUp_op_GrpBox1(self):#Base Ring and Gusset
        
-        self.lbl_No_of_joints_Base_plt=QLabel("No. of Joints")
-        self.lbl_No_of_joints_Base_plt.setStyleSheet(self.ip_textbox_style)
-        self.tb_No_of_joints_Base_plt=QLineEdit("4")
-        self.tb_No_of_joints_Base_plt.setStyleSheet(self.ip_textbox_style)
-        self.lbl_thk_Base_plt=QLabel("Base Plt Thk")
-        self.lbl_thk_Base_plt.setStyleSheet(self.ip_textbox_style)
-        self.tb_thk_Base_plt=QLineEdit("4")
-        self.tb_thk_Base_plt.setStyleSheet(self.ip_textbox_style)
         
         self.lbl_wdth_Base_plt=QLabel("Base Plt Width")
-        self.tb_wdth_Base_plt=QLineEdit("4")
+        self.tb_wdth_Base_plt=QLineEdit("XXX")
         self.tb_wdth_Base_plt.setDisabled(True)
         self.lbl_len_Base_plt=QLabel("Base Plt Length")
-        self.tb_len_Base_plt=QLineEdit("4")
+        self.tb_len_Base_plt=QLineEdit("XX")
         self.tb_len_Base_plt.setDisabled(True)
         
 
@@ -257,15 +288,15 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.btn_add_wt_BOM_Base_plt=QPushButton("Add")
 
         self.lbl_wt_gusset=QLabel("Gusset Weight")
-        self.tb_wt_gusset=QLineEdit("4")
+        self.tb_wt_gusset=QLineEdit("XXX")
         self.tb_wt_gusset.setDisabled(True)
         self.btn_add_wt_gusset=QPushButton("Add")
 
         grid_layout1=QGridLayout()
-        grid_layout1.addWidget(self.lbl_No_of_joints_Base_plt,0,0)
-        grid_layout1.addWidget(self.tb_No_of_joints_Base_plt,0,1)
-        grid_layout1.addWidget(self.lbl_thk_Base_plt,1,0)
-        grid_layout1.addWidget(self.tb_thk_Base_plt,1,1)
+        #grid_layout1.addWidget(self.lbl_No_of_joints_Base_plt,0,0)
+        #grid_layout1.addWidget(self.tb_No_of_joints_Base_plt,0,1)
+       # grid_layout1.addWidget(self.lbl_thk_Base_plt,1,0)
+        #grid_layout1.addWidget(self.tb_thk_Base_plt,1,1)
         grid_layout1.addWidget(self.lbl_wdth_Base_plt,2,0)
         grid_layout1.addWidget(self.tb_wdth_Base_plt,2,1)
         grid_layout1.addWidget(self.lbl_len_Base_plt,3,0)
@@ -287,14 +318,8 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.grpbox1_op.setLayout(grid_layout1)
 
     def SetUp_op_GrpBox2(self):#Comp Ring & Washer
-        self.lbl_No_of_joints_Comp_plt=QLabel("No. of Joints")
-        self.lbl_No_of_joints_Comp_plt.setStyleSheet(self.ip_textbox_style)
-        self.tb_No_of_joints_Comp_plt=QLineEdit("4")
-        self.tb_No_of_joints_Comp_plt.setStyleSheet(self.ip_textbox_style)
-        self.lbl_thk_Comp_plt=QLabel("Comp Plt Thk")
-        self.lbl_thk_Comp_plt.setStyleSheet(self.ip_textbox_style)
-        self.tb_thk_Comp_plt=QLineEdit("4")
-        self.tb_thk_Comp_plt.setStyleSheet(self.ip_textbox_style)
+        
+
         
         self.lbl_wdth_Comp_plt=QLabel("Comp Plt Width")
         self.tb_wdth_Comp_plt=QLineEdit("4")
@@ -319,10 +344,10 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.btn_add_wt_washer=QPushButton("Add")
 
         grid_layout1=QGridLayout()
-        grid_layout1.addWidget(self.lbl_No_of_joints_Comp_plt,0,0)
-        grid_layout1.addWidget(self.tb_No_of_joints_Comp_plt,0,1)
-        grid_layout1.addWidget(self.lbl_thk_Comp_plt,1,0)
-        grid_layout1.addWidget(self.tb_thk_Comp_plt,1,1)
+        # grid_layout1.addWidget(self.lbl_No_of_joints_Comp_plt,0,0)
+        # grid_layout1.addWidget(self.tb_No_of_joints_Comp_plt,0,1)
+        # grid_layout1.addWidget(self.lbl_thk_Comp_plt,1,0)
+        # grid_layout1.addWidget(self.tb_thk_Comp_plt,1,1)
         grid_layout1.addWidget(self.lbl_wdth_Comp_plt,2,0)
         grid_layout1.addWidget(self.tb_wdth_Comp_plt,2,1)
         grid_layout1.addWidget(self.lbl_len_Comp_plt,3,0)
@@ -345,27 +370,79 @@ class Base_Comp_Ring_Gusset(QWidget):
 
 
 
-    def Calculate_Intermediate_op(self):
-        #This Function calculates Shell wt & update it into Shell Op groupbox
-        #allwnc_on_dia (a)   
+    def Calculate_Outputs(self):
         
-        Lg=float(self.tb_bolt_size.text()) #Length
-        E=float(self.tb_BCD.text())#Length Allwnc
-        ID=float(self.tb_washer_Thk.text())#ID
-        t=float(self.tb_gusset_thk.text())
-        rho=float(self.tb_density.text())
-
-        a=self.calculate_allwnce_on_dia(ID,t)
-        self.tb_shell_allwnc_dia.setText(str(a))
+        #Intermediate Outputs
+        bolt_count=int(self.tb_bolt_count.text())
+        No_of_gusset_plt=2*bolt_count 
+        self.tb_No_of_gusset_plt.setText(str(No_of_gusset_plt))
+        bolt_size= int(self.tb_bolt_size.text())
+        gusset_detail=DBController.Get_gusset_detail(bolt_size)
+        gusset_ht=float(gusset_detail.H)
+        self.tb_gusset_ht.setText(str(gusset_ht))
+        gusset_wd_at_top=float(gusset_detail.A)+float(gusset_detail.B)
+        gusset_wd_at_btm=float(gusset_detail.L)-float(gusset_detail.K)
+        self.tb_gusset_wd_at_top.setText(str(gusset_wd_at_top))
+        self.tb_gusset_wd_at_btm.setText(str(gusset_wd_at_btm))
+        BCD=float(self.tb_BCD.text())
+        self.tb_comp_ring_ID.setText(str(BCD-2*float(gusset_detail.A)))
+        self.tb_comp_ring_OD.setText(str(BCD+2*float(gusset_detail.B)))
+        self.tb_base_ring_ID.setText(str(BCD-2*(float(gusset_detail.A)+float(gusset_detail.K))))
+        self.tb_base_ring_OD.setText(str(float(self.tb_base_ring_ID.text())+2*float(gusset_detail.L)))
+        self.tb_washer_dia.setText(str(float(gusset_detail.F)))
         
-        TL=Lg+E
-        shell_wt =round(math.pi*(ID+a)*t*TL*rho*0.000001,2)
-        self.tb_Shell_wt.setText(str(shell_wt))
-        #print(shell_wt)
-        self.btn_calc_shell_wt.setFocus()#Remove focus from Combox otherwise accidently can be changed by user
-        self.reset_button_color_default(self.btn_add_shell_mat_to_BOM)#Reset the color of Add Material to BOM as Weight value got changed.
         
+       #---------#
+       #Outputs
+       #----------#
+       
+       #Base Plt
+        n_base_ring=int(self.tb_No_of_joints_Base_plt.text())
+        OD_base_ring=float(self.tb_base_ring_OD.text())
+        ID_base_ring=float(self.tb_base_ring_ID.text())
+        wdth_of_base_plt = self.BasePlt_Size_Wd(n_base_ring,OD_base_ring)
+        len_of_base_plt = self.BasePlt_Size_Lg(n_base_ring,OD_base_ring,ID_base_ring)
+        density=float(self.tb_density.text())*0.000001
+        thk_base_plt=float(self.tb_thk_Base_plt.text())
+        wt_base_ring = round(wdth_of_base_plt*len_of_base_plt*thk_base_plt*density)
+        wt_BOM_base_ring= round(math.pi/4*(OD_base_ring**2-ID_base_ring**2)*thk_base_plt*density)
         
+        #Gusets
+        thk_gusset=float(self.tb_gusset_thk.text())       
+        wt_gusset=round(No_of_gusset_plt*gusset_ht*gusset_wd_at_top*thk_gusset*density)
+        
+        #Comp Ring
+        n_comp_ring=int(self.tb_No_of_joints_Comp_plt.text())
+        No_of_bolts=int(self.tb_bolt_count.text())
+        OD_comp_ring=float(self.tb_comp_ring_OD.text())
+        ID_comp_ring=float(self.tb_comp_ring_ID.text())
+        thk_comp_ring=float(self.tb_thk_Comp_plt.text())
+        is_ring=self.tb_Compression.text().lower()=='ring'       
+        wdth_of_comp_plt= self.BasePlt_Size_Wd(n_comp_ring,OD_comp_ring) if(is_ring) else (ID_comp_ring)
+        len_of_comp_plt=self.BasePlt_Size_Lg(n_comp_ring,OD_comp_ring,ID_comp_ring) if(is_ring) else (OD_comp_ring) 
+        wt_comp_ring =  round(wdth_of_comp_plt*len_of_comp_plt*thk_comp_ring*density) if(is_ring) else round(wdth_of_comp_plt*len_of_comp_plt*thk_comp_ring*density*No_of_bolts)
+        wt_BOM_comp_ring = round(math.pi/4*(OD_comp_ring**2-ID_comp_ring**2)*thk_comp_ring*density) if(is_ring) else round(wdth_of_comp_plt*len_of_comp_plt*thk_comp_ring*density*No_of_bolts) 
+        
+        #Washer
+        OD_washer=float(self.tb_washer_dia.text())
+        thk_washer=float(self.tb_washer_Thk.text())
+        ID_washer=float(OD_washer-bolt_size)
+        wt_washer=round(math.pi/4*(OD_washer**2-ID_washer**2)*thk_washer*No_of_bolts*density)
+        
+        #Update OP groupboxes
+        self.tb_wdth_Base_plt.setText(str(wdth_of_base_plt))
+        self.tb_len_Base_plt.setText(str(len_of_base_plt))
+        self.tb_wt_Base_plt.setText(str(wt_base_ring))
+        self.tb_wt_BOM_Base_plt.setText(str(wt_BOM_base_ring))
+        self.tb_wt_gusset.setText(str(wt_gusset))
+        self.tb_wdth_Comp_plt.setText(str(wdth_of_comp_plt))
+        self.tb_len_Comp_plt.setText(str(len_of_comp_plt))
+        self.tb_wt_Comp_plt.setText(str(wt_comp_ring))
+        self.tb_wt_BOM_Comp_plt.setText(str(wt_BOM_comp_ring))
+        self.tb_wt_washer.setText(str(wt_washer))
+        
+        #self.reset_button_color_default(self.btn_add_shell_mat_to_BOM)#Reset the color of Add Material to BOM as Weight value got changed.
+            
     def update_material(self) :
         #This will update the Material in the Shell OPutput Groupbox
         #self.tb_shell_op_Material.setText(str(self.cmb_box_material.currentText()))
@@ -386,21 +463,49 @@ class Base_Comp_Ring_Gusset(QWidget):
         print("Add Shell Material to BOM Pressed")
         self.change_button_color_green()
 
-    def calculate_allwnce_on_dia(_,ID, T):
-        OD = ID + 2 * T
+    # @staticmethod
+    # def calculate_allwnce_on_dia(ID, T):
+    #     OD = ID + 2 * T
             
-        if T > 100:
-            Allow = 300
-        elif 50 < T <= 100:
-            Allow = 2 * T
-        elif (30 < T < 50) and (OD / T) <= 24:
-            Allow = 2 * T
-        elif (T <= 30) and (OD / T) <= 15:
-            Allow = 1 * T
-        else:
-            Allow = 0
-        print(ID,OD,T,Allow)    
-        return Allow
+    #     if T > 100:
+    #         Allow = 300
+    #     elif 50 < T <= 100:
+    #         Allow = 2 * T
+    #     elif (30 < T < 50) and (OD / T) <= 24:
+    #         Allow = 2 * T
+    #     elif (T <= 30) and (OD / T) <= 15:
+    #         Allow = 1 * T
+    #     else:
+    #         Allow = 0
+    #     print(ID,OD,T,Allow)    
+    #     return Allow
+   
+    @staticmethod
+    def BasePlt_Size_Wd(n, OD):  
+        #'This Function is used to calculate the width required for the base plate development
+        #' n = no. of Joints required, OD = Base Ring OD
+
+        T = 360 / (2 * n)
+        Pi = 22 / 7
+        R1 = (OD / 2) + 5
+        Wd = 2 * R1 * math.sin(T * Pi / 180)
+        return round(Wd)
+    
+    @staticmethod
+    def BasePlt_Size_Lg(n, OD, ID):     
+    # 'This Function is used to calculate the Length of plate required of the base plate development
+    # ' n = no. of Joints required, OD = Base Ring OD, ID = Base RIng ID
+
+        T = 360 / (2 * n)
+        Pi = 22 / 7
+        R1 = (OD / 2) + 9
+        R2 = (ID / 2) - 9
+        x = R2 * math.cos(T * Pi / 180)
+        y = R2 * math.sin(T * Pi / 180)
+        Lg = (R1 - x) + (n - 1) * (math.sqrt(R1 ** 2 - y ** 2) - x)
+        return round(Lg)
+        
+   
     #This function changes the coor of sender button to green
     def change_button_color_green(self):
         button = self.sender()

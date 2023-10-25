@@ -18,7 +18,7 @@ from Controller.project_controller import ProjectController
 
 
 
-class Tab1_DEnd(QWidget):
+class Tab_DEnd(QWidget):
     dentype=0
     def __init__(self):
         super().__init__()
@@ -300,9 +300,11 @@ class DEND_blk_type(QWidget): #Variant=BLANK TYPE
         #Optimum Calculated Plate Len for Largeand Small Section
         self.lbl_optimum_plt1_len=QLabel("Optimum Plate1 Length")
         self.tb_optimum_plt1_len = QLineEdit("0.00")
+        self.tb_optimum_plt1_len.setFixedWidth(100)
         self.tb_optimum_plt1_len.setEnabled(False) 
         self.lbl_optimum_plt2_len=QLabel("Optimum Plate2 Length")
         self.tb_optimum_plt2_len = QLineEdit("0.00")
+        self.tb_optimum_plt2_len.setFixedWidth(100)
         self.tb_optimum_plt2_len.setEnabled(False) 
         self.button_calc_opt_plt_len = QPushButton("Optimize Plate length")
         
@@ -1004,8 +1006,9 @@ class DEND_crwn_petal_type(QWidget):#Variant=CROWN & PETAL TYPE
                 "Allwnc": float(self.tb_Allwnc.text()),
             }
             calc = DishEndCalc(input_dict=self.input_dict)
+            #Read Output into a varaible
             self.PETEL_OP_PARMS_WITH_ALLWNC=calc.Toripetal()#Main DEnd Calculation
-            print(self.PETEL_OP_PARMS_WITH_ALLWNC)
+            #print(self.PETEL_OP_PARMS_WITH_ALLWNC)
             
             self.update_grp_box3() #Update DEnd BOM groupbox values
 
@@ -1212,7 +1215,7 @@ class common_functionality():
           
     def Show_MessageBox(sender,msg:str):
         message_box = QMessageBox(sender)
-        message_box.setIcon(QMessageBox.Icon.Information)
+        message_box.setIcon(QMessageBox.Icon.Critical)
         message_box.setText(msg)
         message_box.setWindowTitle("Information")
         message_box.setStandardButtons(QMessageBox.StandardButton.Ok)

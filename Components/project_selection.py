@@ -149,7 +149,11 @@ class Project_Selection(QWidget): #QMainWIndow
         var.project_name=project_name       
         user=var.uname
         
-        if(project_id):        
+        #Check if Project exists DO nothing
+        if(self.rb2_new_project.isChecked() and get_current_project_details(project_id=project_id)):
+            Show_MessageBox(self,"Project with Given WorkOrder Already Exists")
+        
+        elif(project_id):        
             create_new_project(proj_id=var.project_id,proj_name=project_name,project_note=project_note,user=user)        
             _ProjectController=ProjectController(project_id=var.project_id)
             _ProjectController.create_project_output_tables() #If New Project Creation is succesfull
@@ -159,11 +163,11 @@ class Project_Selection(QWidget): #QMainWIndow
             #self.close() 
 
         
-    def generate_project_id(self):
+    # def generate_project_id(self):
         
-        project_id=str.lower("ENQ-23-09-01-00")
+    #     project_id=str.lower("ENQ-23-09-01-00")
         
-        return project_id
+    #     return project_id
                 
     def Show_MainTabPage(self):
        #WIll create New Project If Diesnt exists and also creates Projects output Estimation/Surface Table for the project,

@@ -16,6 +16,7 @@ session=DB_config_class.session
 Base=DB_config_class.Base
 
 
+#Add update delete Itens in estimation and Surface are atable for a existing project
 class ProjectController:
     
     def __init__(self,project_id=None):
@@ -126,6 +127,9 @@ class ProjectController:
             self.session.rollback()
         # end try  
 
+
+
+#Other FUnctionality read/write 
 def create_new_project(proj_id,proj_name,project_note,user,status="Active"):
     try:
         new_project = Project(project_id=proj_id, project_name=proj_name, project_note=project_note,user_staffNo=user, status=status) 

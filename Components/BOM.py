@@ -24,8 +24,6 @@ class Tab4_BOM(QWidget):
         # self.Estimation=Estimation_Detail()
         # self.SurfaceArea=SurfaceArea_Detail()
         
-        
-        
 
         self.V_box_main_layout=QVBoxLayout()       
         self.V_box_main_layout.addLayout(self.V_box_layout)

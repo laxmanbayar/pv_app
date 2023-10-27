@@ -87,6 +87,7 @@ class Shell(QWidget):
                       
     def set_ui_layout(self):
         self.grpbox=QGroupBox("Shell")
+        self.grpbox.setStyleSheet(set_styles.ip_grpbox1_style)
         self.grpbox_Vbox_layout_shell=QVBoxLayout()
         self.grpbox.setLayout(self.grpbox_Vbox_layout_shell)
         self.Vbox_main_shell=QVBoxLayout()
@@ -208,7 +209,7 @@ class Shell(QWidget):
        # print(ID,OD,T,Allow)    
         return Allow
     
-    def Calculate_Shell_wt(self,raw_plt_width):
+    # def Calculate_Shell_wt(self,raw_plt_width):
         
         ID=float(self.tb_shell_ID.text())#ID
         t=float(self.tb_shell_thk.text())#thk
@@ -273,7 +274,7 @@ class Shell(QWidget):
             #Qty along Height            
             Qty_alng_ht[index]=int(math.ceil(h_incld_allwmc/raw_mat_plt_width))  
             #Raw mat each plt length along seam       
-            Lg_per_seam_alng_len[index]=self.roundup_to_nex100(math.pi*(ID+t)+a)/(no_of_seams_alng_len+1) #Length per seam
+            Lg_per_seam_alng_len[index]=self.roundup_to_next100(math.pi*(ID+t)+a)/(no_of_seams_alng_len+1) #Length per seam
             shell_wt[index] =round((no_of_seams_alng_len+1)*Lg_per_seam_alng_len[index]*h_incld_allwmc*t*rho*0.000001,2)
            
            #Surface ARea
@@ -297,7 +298,7 @@ class Shell(QWidget):
         self.reset_button_color_default(self.btn_add_shell_mat_to_BOM)#Reset the color of Add Material to BOM as Weight value got changed.
         
             
-    def roundup_to_nex100(self,num):
+    def roundup_to_next100(self,num):
        return  math.ceil(num/100)*100
         
     def change_button_color_green(self):
@@ -311,7 +312,33 @@ class Shell(QWidget):
 
 
 
+class set_styles:    
+    op_vbox_style="""
+                QVBoxLayout {
+                    font: bold;
+                    font-size:14px;
+                    padding: 15px;
+                    border: 1px solid silver;
+                    border-radius: 6px;
+                    margin-top: 5px;
+                    background-color:lightgrey                     
 
+                }
+             
+              
+                """   
+    ip_grpbox1_style="""
+                QGroupBox {
+                    font: bold;
+                    font-size:14px;
+                    padding: 15px;
+                    border: 1px solid silver;
+                    border-radius: 6px;
+                    background-color:#ccffcc
+                                        
+                }
+                          
+                """
 
 
 # class Shellll(QWidget):

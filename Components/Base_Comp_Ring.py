@@ -6,6 +6,7 @@ from Variables import var
 from PyQt6.QtCore import Qt
 import math
 import Controller.project_controller as DBController
+from Controller.project_controller import ProjectController
 
 class Tab_Base_Comp_Ring(QWidget):
     def __init__(self):
@@ -13,23 +14,19 @@ class Tab_Base_Comp_Ring(QWidget):
         self.InitializeUI()
     def InitializeUI(self):
         H_box_layout= QHBoxLayout() 
-        base_comp_ring_gusset=Base_Comp_Ring_Gusset() 
-        #comp_ring=Comp_Ring()
-        H_box_layout.addWidget(base_comp_ring_gusset)
-        #H_box_layout.addWidget(comp_ring)
+        base_comp_ring_gusset=Base_Comp_Ring_Gusset(Number=1)        
+        H_box_layout.addWidget(base_comp_ring_gusset)       
 
         V_box_main_layout=QVBoxLayout()
-        V_box_main_layout.addLayout(H_box_layout)
-        #Misc_items = Misc()
-        
-        #V_box_main_layout.addWidget(Misc_items)
+        V_box_main_layout.addLayout(H_box_layout)       
 
         self.setLayout(V_box_main_layout)
 
 class Base_Comp_Ring_Gusset(QWidget):
 
-    def __init__(self):
+    def __init__(self,Number):
         super().__init__()
+        self.Number=Number
         self.InitializeUI()
       
 
@@ -45,9 +42,7 @@ class Base_Comp_Ring_Gusset(QWidget):
         
         self.HBox_layout_op=QHBoxLayout()
         self.SetUp_op_GrpBox1()#Groupbox3
-        self.HBox_layout_op.addWidget(self.grpbox1_op)
-        self.SetUp_op_GrpBox2()#Groupbox3
-        self.HBox_layout_op.addWidget(self.grpbox2_op)
+        self.HBox_layout_op.addWidget(self.grpbox1_op)     
         
         self.Vbox_main_layout=QVBoxLayout()
         self.Vbox_main_layout.addLayout(self.HBox_layout_ip)
@@ -78,7 +73,7 @@ class Base_Comp_Ring_Gusset(QWidget):
                     padding: 15px;
                     border: 1px solid silver;
                     border-radius: 6px;
-                    background-color:lightgreen
+                    background-color:#ccffcc
                                         
                 }
                           
@@ -153,6 +148,9 @@ class Base_Comp_Ring_Gusset(QWidget):
         
         self.lbl_washer_Thk=QLabel("Washer Thk")
         self.tb_washer_Thk =QLineEdit("20")
+        self.lbl_washer_material=QLabel("Washer Material")
+        self.cmb_box_washer_material =QComboBox()
+        self.cmb_box_washer_material.addItems(self.material_list)
         
         
         
@@ -193,15 +191,17 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.Input_Gridlayout.addWidget(self.tb_No_of_joints_Comp_plt,6,3)        
         self.Input_Gridlayout.addWidget(self.lbl_thk_Comp_plt,7,0)#
         self.Input_Gridlayout.addWidget(self.tb_thk_Comp_plt,7,1)
-        self.Input_Gridlayout.addWidget(self.lbl_washer_Thk,7,2)
-        self.Input_Gridlayout.addWidget(self.tb_washer_Thk,7,3)
+        self.Input_Gridlayout.addWidget(self.lbl_washer_Thk,8,0)
+        self.Input_Gridlayout.addWidget(self.tb_washer_Thk,8,1)
+        self.Input_Gridlayout.addWidget(self.lbl_washer_material,8,2)
+        self.Input_Gridlayout.addWidget(self.cmb_box_washer_material,8,3)
         
        
         
        
-        self.btn_calc_intrmd_op=QPushButton("Calculate Inermediate Op")
-        self.btn_calc_intrmd_op.clicked.connect(self.Calculate_Outputs)
-        self.Input_Gridlayout.addWidget(self.btn_calc_intrmd_op,8,1,Qt.AlignmentFlag.AlignHCenter)
+        self.btn_calc_op=QPushButton("Calculate Output")
+        self.btn_calc_op.clicked.connect(self.Calculate_Outputs)
+        self.Input_Gridlayout.addWidget(self.btn_calc_op,9,1,Qt.AlignmentFlag.AlignHCenter)
 
         #Create a GroupBox1 and set its layout to VBox_layout1
         self.grpbox1 = QGroupBox("Input(Base Ring , Comp Ring , Gusset , Washer)",self)
@@ -269,7 +269,7 @@ class Base_Comp_Ring_Gusset(QWidget):
         
     def SetUp_op_GrpBox1(self):#Base Ring and Gusset
        
-        
+        #Base Ring and Gusset
         self.lbl_wdth_Base_plt=QLabel("Base Plt Width")
         self.tb_wdth_Base_plt=QLineEdit("XXX")
         self.tb_wdth_Base_plt.setDisabled(True)
@@ -281,7 +281,7 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.lbl_wt_Base_plt=QLabel("Base Plt Weight")
         self.tb_wt_Base_plt=QLineEdit("XXXX")
         self.tb_wt_Base_plt.setDisabled(True)
-        self.btn_add_wt_Base_plt=QPushButton("Add")
+        self.btn_add_wt_Base_plt=QPushButton("Add")       
         self.lbl_wt_BOM_Base_plt=QLabel("Base Plt Weight BOM")
         self.tb_wt_BOM_Base_plt=QLineEdit("XXXX")
         self.tb_wt_BOM_Base_plt.setDisabled(True)
@@ -291,36 +291,10 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.tb_wt_gusset=QLineEdit("XXX")
         self.tb_wt_gusset.setDisabled(True)
         self.btn_add_wt_gusset=QPushButton("Add")
-
-        grid_layout1=QGridLayout()
-        #grid_layout1.addWidget(self.lbl_No_of_joints_Base_plt,0,0)
-        #grid_layout1.addWidget(self.tb_No_of_joints_Base_plt,0,1)
-       # grid_layout1.addWidget(self.lbl_thk_Base_plt,1,0)
-        #grid_layout1.addWidget(self.tb_thk_Base_plt,1,1)
-        grid_layout1.addWidget(self.lbl_wdth_Base_plt,2,0)
-        grid_layout1.addWidget(self.tb_wdth_Base_plt,2,1)
-        grid_layout1.addWidget(self.lbl_len_Base_plt,3,0)
-        grid_layout1.addWidget(self.tb_len_Base_plt,3,1)
-        grid_layout1.addWidget(self.lbl_wt_Base_plt,4,0)
-        grid_layout1.addWidget(self.tb_wt_Base_plt,4,1)
-        grid_layout1.addWidget(self.btn_add_wt_Base_plt,4,2)
-        grid_layout1.addWidget(self.lbl_wt_BOM_Base_plt,5,0)
-        grid_layout1.addWidget(self.tb_wt_BOM_Base_plt,5,1)
-        grid_layout1.addWidget(self.btn_add_wt_BOM_Base_plt,5,2)
-        grid_layout1.addWidget(self.lbl_wt_gusset,6,0)
-        grid_layout1.addWidget(self.tb_wt_gusset,6,1)
-        grid_layout1.addWidget(self.btn_add_wt_gusset,6,2)
-       
-
-        self.grpbox1_op= QGroupBox("Base Plt and Gusset",self)
         
-        self.grpbox1_op.setStyleSheet(self.op_grpbox_style)  
-        self.grpbox1_op.setLayout(grid_layout1)
-
-    def SetUp_op_GrpBox2(self):#Comp Ring & Washer
         
-
         
+        #Comp Ring ad Washer
         self.lbl_wdth_Comp_plt=QLabel("Comp Plt Width")
         self.tb_wdth_Comp_plt=QLineEdit("4")
         self.tb_wdth_Comp_plt.setDisabled(True)
@@ -342,32 +316,63 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.tb_wt_washer=QLineEdit("4")
         self.tb_wt_washer.setDisabled(True)
         self.btn_add_wt_washer=QPushButton("Add")
+        
+        #Base comp ring Syrface area
+        self.lbl_base_comp_ring_surface_area=QLabel("Base Comp Ring Surface Area")
+        self.tb_base_comp_ring_surface_area=QLineEdit("XXX")
+        self.tb_base_comp_ring_surface_area.setDisabled(True)
+        self.btn_add_base_comp_ring_surface_area=QPushButton("Add")
+        
+        
+        
 
         grid_layout1=QGridLayout()
-        # grid_layout1.addWidget(self.lbl_No_of_joints_Comp_plt,0,0)
-        # grid_layout1.addWidget(self.tb_No_of_joints_Comp_plt,0,1)
-        # grid_layout1.addWidget(self.lbl_thk_Comp_plt,1,0)
-        # grid_layout1.addWidget(self.tb_thk_Comp_plt,1,1)
-        grid_layout1.addWidget(self.lbl_wdth_Comp_plt,2,0)
-        grid_layout1.addWidget(self.tb_wdth_Comp_plt,2,1)
-        grid_layout1.addWidget(self.lbl_len_Comp_plt,3,0)
-        grid_layout1.addWidget(self.tb_len_Comp_plt,3,1)
-        grid_layout1.addWidget(self.lbl_wt_Comp_plt,4,0)
-        grid_layout1.addWidget(self.tb_wt_Comp_plt,4,1)
-        grid_layout1.addWidget(self.btn_add_wt_Comp_plt,4,2)
-        grid_layout1.addWidget(self.lbl_wt_BOM_Comp_plt,5,0)
-        grid_layout1.addWidget(self.tb_wt_BOM_Comp_plt,5,1)
-        grid_layout1.addWidget(self.btn_add_wt_BOM_Comp_plt,5,2)
-        grid_layout1.addWidget(self.lbl_wt_washer,6,0)
-        grid_layout1.addWidget(self.tb_wt_washer,6,1)
-        grid_layout1.addWidget(self.btn_add_wt_washer,6,2)
+        #Base Ring      
+        grid_layout1.addWidget(self.lbl_wdth_Base_plt,0,0)
+        grid_layout1.addWidget(self.tb_wdth_Base_plt,0,1)
+        grid_layout1.addWidget(self.lbl_len_Base_plt,1,0)
+        grid_layout1.addWidget(self.tb_len_Base_plt,1,1)
+        grid_layout1.addWidget(self.lbl_wt_Base_plt,2,0)
+        grid_layout1.addWidget(self.tb_wt_Base_plt,2,1)
+        grid_layout1.addWidget(self.btn_add_wt_Base_plt,2,2)
+        grid_layout1.addWidget(self.lbl_wt_BOM_Base_plt,3,0)
+        grid_layout1.addWidget(self.tb_wt_BOM_Base_plt,3,1)
+        grid_layout1.addWidget(self.btn_add_wt_BOM_Base_plt,3,2)
+        grid_layout1.addWidget(self.lbl_wt_gusset,4,0)
+        grid_layout1.addWidget(self.tb_wt_gusset,4,1)
+        grid_layout1.addWidget(self.btn_add_wt_gusset,4,2)
+        
+        #Surface Area
+        grid_layout1.addWidget(self.lbl_base_comp_ring_surface_area,5,0)
+        grid_layout1.addWidget(self.tb_base_comp_ring_surface_area,5,1)
+        grid_layout1.addWidget(self.btn_add_base_comp_ring_surface_area,5,2)
+        
+        
+        #Comp Ring
+        grid_layout1.addWidget(self.lbl_wdth_Comp_plt,0,3)
+        grid_layout1.addWidget(self.tb_wdth_Comp_plt,0,4)
+        grid_layout1.addWidget(self.lbl_len_Comp_plt,1,3)
+        grid_layout1.addWidget(self.tb_len_Comp_plt,1,4)
+        grid_layout1.addWidget(self.lbl_wt_Comp_plt,2,3)
+        grid_layout1.addWidget(self.tb_wt_Comp_plt,2,4)
+        grid_layout1.addWidget(self.btn_add_wt_Comp_plt,2,5)
+        grid_layout1.addWidget(self.lbl_wt_BOM_Comp_plt,3,3)
+        grid_layout1.addWidget(self.tb_wt_BOM_Comp_plt,3,4)
+        grid_layout1.addWidget(self.btn_add_wt_BOM_Comp_plt,3,5)
+        grid_layout1.addWidget(self.lbl_wt_washer,4,3)
+        grid_layout1.addWidget(self.tb_wt_washer,4,4)
+        grid_layout1.addWidget(self.btn_add_wt_washer,4,5)
+        
+        
+        
        
 
-        self.grpbox2_op= QGroupBox("Comp Plt and Washer",self)
-       
-        self.grpbox2_op.setStyleSheet(self.op_grpbox_style)  
-        self.grpbox2_op.setLayout(grid_layout1)
-
+        self.grpbox1_op= QGroupBox("Base Plt-Comp Plt-Washer-Gusset",self)
+        
+        self.grpbox1_op.setStyleSheet(self.op_grpbox_style)  
+        self.grpbox1_op.setLayout(grid_layout1)
+        
+        
 
 
     def Calculate_Outputs(self):
@@ -404,8 +409,8 @@ class Base_Comp_Ring_Gusset(QWidget):
         len_of_base_plt = self.BasePlt_Size_Lg(n_base_ring,OD_base_ring,ID_base_ring)
         density=float(self.tb_density.text())*0.000001
         thk_base_plt=float(self.tb_thk_Base_plt.text())
-        wt_base_ring = round(wdth_of_base_plt*len_of_base_plt*thk_base_plt*density)
-        wt_BOM_base_ring= round(math.pi/4*(OD_base_ring**2-ID_base_ring**2)*thk_base_plt*density)
+        wt_base_ring = round(wdth_of_base_plt*len_of_base_plt*thk_base_plt*density,1)
+        wt_BOM_base_ring= round(math.pi/4*(OD_base_ring**2-ID_base_ring**2)*thk_base_plt*density,1)
         
         #Gusets
         thk_gusset=float(self.tb_gusset_thk.text())       
@@ -416,18 +421,26 @@ class Base_Comp_Ring_Gusset(QWidget):
         No_of_bolts=int(self.tb_bolt_count.text())
         OD_comp_ring=float(self.tb_comp_ring_OD.text())
         ID_comp_ring=float(self.tb_comp_ring_ID.text())
-        thk_comp_ring=float(self.tb_thk_Comp_plt.text())
+        thk_comp_plt=float(self.tb_thk_Comp_plt.text())
         is_ring=self.tb_Compression.text().lower()=='ring'       
         wdth_of_comp_plt= self.BasePlt_Size_Wd(n_comp_ring,OD_comp_ring) if(is_ring) else (ID_comp_ring)
         len_of_comp_plt=self.BasePlt_Size_Lg(n_comp_ring,OD_comp_ring,ID_comp_ring) if(is_ring) else (OD_comp_ring) 
-        wt_comp_ring =  round(wdth_of_comp_plt*len_of_comp_plt*thk_comp_ring*density) if(is_ring) else round(wdth_of_comp_plt*len_of_comp_plt*thk_comp_ring*density*No_of_bolts)
-        wt_BOM_comp_ring = round(math.pi/4*(OD_comp_ring**2-ID_comp_ring**2)*thk_comp_ring*density) if(is_ring) else round(wdth_of_comp_plt*len_of_comp_plt*thk_comp_ring*density*No_of_bolts) 
+        wt_comp_ring =  round(wdth_of_comp_plt*len_of_comp_plt*thk_comp_plt*density,1) if(is_ring) else round(wdth_of_comp_plt*len_of_comp_plt*thk_comp_plt*density*No_of_bolts,1)
+        wt_BOM_comp_ring = round(math.pi/4*(OD_comp_ring**2-ID_comp_ring**2)*thk_comp_plt*density,1) if(is_ring) else round(wdth_of_comp_plt*len_of_comp_plt*thk_comp_plt*density*No_of_bolts,1) 
         
         #Washer
         OD_washer=float(self.tb_washer_dia.text())
         thk_washer=float(self.tb_washer_Thk.text())
         ID_washer=float(OD_washer-bolt_size)
-        wt_washer=round(math.pi/4*(OD_washer**2-ID_washer**2)*thk_washer*No_of_bolts*density)
+        wt_washer=round(math.pi/4*(OD_washer**2-ID_washer**2)*thk_washer*No_of_bolts*density,1)
+        
+        
+        #Surface Area
+        surface_area_base_ring=math.pi/4*((OD_base_ring/1000)**2-(ID_base_ring/1000)**2)+math.pi*OD_base_ring*thk_base_plt/1000/1000*2
+        surface_area_comp_ring=math.pi/4*((OD_comp_ring/1000)**2-(ID_comp_ring/1000)**2)+math.pi*OD_comp_ring*thk_comp_plt/1000/1000*2
+        surface_area_gusset=gusset_ht*gusset_wd_at_top/1000/1000*No_of_gusset_plt*2
+        surface_arae_base_comp_ring=round(surface_area_base_ring+surface_area_comp_ring+surface_area_gusset,1)
+        
         
         #Update OP groupboxes
         self.tb_wdth_Base_plt.setText(str(wdth_of_base_plt))
@@ -440,8 +453,60 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.tb_wt_Comp_plt.setText(str(wt_comp_ring))
         self.tb_wt_BOM_Comp_plt.setText(str(wt_BOM_comp_ring))
         self.tb_wt_washer.setText(str(wt_washer))
+        self.tb_base_comp_ring_surface_area.setText(str(surface_arae_base_comp_ring))
         
-        #self.reset_button_color_default(self.btn_add_shell_mat_to_BOM)#Reset the color of Add Material to BOM as Weight value got changed.
+        #Define Button functionality
+        self.btn_add_wt_Base_plt.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                                           {'item':'Base Ring',
+                                                                            'item_name':'Base Ring'+str(self.Number),
+                                                                            'wt':str(wt_base_ring),
+                                                                            'material':self.cmb_box_material.currentText()
+                                                                            }))
+        
+        self.btn_add_wt_BOM_Base_plt.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                            {'item':'Base Ring',
+                                                            'item_name':'Base Ring BOM'+str(self.Number),
+                                                            'wt':str(wt_BOM_base_ring),
+                                                            'material':self.cmb_box_material.currentText()
+                                                            }))
+
+        self.btn_add_wt_Comp_plt.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                            {'item':'Comp Ring',
+                                                            'item_name':'Comp Ring'+str(self.Number),
+                                                            'wt':str(wt_comp_ring),
+                                                            'material':self.cmb_box_material.currentText()
+                                                            }))
+        
+        self.btn_add_wt_BOM_Comp_plt.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                            {'item':'Comp Ring',
+                                                            'item_name':'Comp Ring BOM'+str(self.Number),
+                                                            'wt':str(wt_BOM_comp_ring),
+                                                            'material':self.cmb_box_material.currentText()
+                                                            }))
+        
+        self.btn_add_wt_gusset.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                            {'item':'Gusset',
+                                                            'item_name':'Gusset'+str(self.Number),
+                                                            'wt':str(wt_gusset),
+                                                            'material':self.cmb_box_material.currentText()
+                                                            }))
+        
+        self.btn_add_wt_washer.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                            {'item':'Washer',
+                                                            'item_name':'Washer'+str(self.Number),
+                                                            'wt':str(wt_washer),
+                                                            'material':self.cmb_box_material.currentText()
+                                                            }))
+        
+        self.btn_add_base_comp_ring_surface_area.clicked.connect(lambda:self.Add_SurfaceArea_to_BOM(data=
+                                                            {'item':'Gusset',
+                                                            'item_name':'Gusset'+str(self.Number),
+                                                            'surface_area':str(surface_arae_base_comp_ring)                                                            
+                                                            }))
+
+        
+        #self.change_button_color_green()#Change color of the Calc button
+        self.reset_button_color_default()#Reset the color of Add  to BOM as Weight value got changed.
             
     def update_material(self) :
         #This will update the Material in the Shell OPutput Groupbox
@@ -459,9 +524,17 @@ class Base_Comp_Ring_Gusset(QWidget):
             self.lbl_cone_angle.setHidden(True)
             self.tb_cone_angle.setHidden(True)
 
-    def Add_Shell_mat_to_BOM(self):
+    def Add_wt_to_BOM(self,data):
         print("Add Shell Material to BOM Pressed")
+        _projectcontroller=ProjectController()
+        _projectcontroller.add_update_item(item=data['item'],item_name=data['item_name'],wt=data['wt'],material=data['material'])
+        print(data)
         self.change_button_color_green()
+        
+    def Add_SurfaceArea_to_BOM(self,data):
+         _projectcontroller=ProjectController()
+         _projectcontroller.add_update_surface_area(item=data['item'],item_name=data['item_name'],surface_area=data['surface_area'])
+         self.change_button_color_green()
 
     # @staticmethod
     # def calculate_allwnce_on_dia(ID, T):
@@ -512,8 +585,9 @@ class Base_Comp_Ring_Gusset(QWidget):
         button.setStyleSheet("background-color: green; color: white;")
 
     #This Function reset the color of "button" passed as an argument.
-    def reset_button_color_default(self,button):
+    def reset_button_color_default(self):
         #button = self.sender()
-        button.setStyleSheet("")       
+        for button in self.grpbox1_op.findChildren(QPushButton):
+            button.setStyleSheet("")  # Reset the color      
 
 

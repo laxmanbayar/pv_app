@@ -13,6 +13,7 @@ from Components.DishEnd import Tab_DEnd
 from Components.BOM import Tab4_BOM
 from Components.Shell import Tab_Shell
 from Components.Misc import Tab_Misc
+from Components.Skirt import Tab_Skirt
 
 
 
@@ -32,8 +33,10 @@ class MainTabPage(QWidget):
         DishEnd_tab = Tab_DEnd()
         Shell_tab=Tab_Shell()
         Misc=Tab_Misc()
-        Base_comp_ring=Tab_Base_Comp_Ring()
+        Base_comp_ring_tab=Tab_Base_Comp_Ring()
+        Skirt_tab=Tab_Skirt()
         BOM_tab = Tab4_BOM()
+        
 
         
 
@@ -41,7 +44,8 @@ class MainTabPage(QWidget):
         tab_widget.addTab(DishEnd_tab, "Dish End")
         tab_widget.addTab(Shell_tab, "Shell")
         tab_widget.addTab(Misc, "Misc.")
-        tab_widget.addTab(Base_comp_ring, "Base Comp. Ring")
+        tab_widget.addTab(Base_comp_ring_tab, "Base Comp. Ring")
+        tab_widget.addTab(Skirt_tab, "Skirt")
         tab_widget.addTab(BOM_tab, "BOM")
 
         

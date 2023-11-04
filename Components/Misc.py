@@ -546,7 +546,7 @@ class Misc(QWidget):
         #table.resizeColumnsToContents()
 
     def get_elbow_wt_from_db(self,NPS,SCHEDULE):
-        elbow_wt_per_meter=Get_Elbow_Details(NPS,SCHEDULE)
+        elbow_wt_per_meter=float(Get_Elbow_Details(NPS,SCHEDULE).WtPerMtr)
         return elbow_wt_per_meter
     
     

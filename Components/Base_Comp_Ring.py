@@ -1,12 +1,12 @@
 import typing
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QApplication, QLabel, QLineEdit, QComboBox, QRadioButton, QPushButton, QVBoxLayout, QHBoxLayout,QWidget, \
-    QTabWidget,QGroupBox,QTableWidget,QTableWidgetItem,QGridLayout
+    QTabWidget,QGroupBox,QTableWidget,QTableWidgetItem,QGridLayout,QScrollArea
 from Variables import var
 from PyQt6.QtCore import Qt
 import math
 import Controller.project_controller as DBController
-from Controller.project_controller import ProjectController
+from Controller.project_controller import ProjectController,Get_Elbow_Details,Get_WL_FLG_detail
 
 class Tab_Base_Comp_Ring(QWidget):
     def __init__(self):
@@ -14,13 +14,32 @@ class Tab_Base_Comp_Ring(QWidget):
         self.InitializeUI()
     def InitializeUI(self):
         H_box_layout= QHBoxLayout() 
-        base_comp_ring_gusset=Base_Comp_Ring_Gusset(Number=1)        
-        H_box_layout.addWidget(base_comp_ring_gusset)       
+        base_comp_ring_gusset=Base_Comp_Ring_Gusset(Number=1)             
+        H_box_layout.addWidget(base_comp_ring_gusset)
+         
+        V_box_layout=QVBoxLayout()
+        V_box_layout.addLayout(H_box_layout)
+        Bottom_DEnd_Nozzle=Nozzle_DEnd()  
+        V_box_layout.addWidget(Bottom_DEnd_Nozzle) 
+        
+        # add one container widget and set its Lsyout as "V_box_layout"
+        self.container_widget = QWidget()
+        self.container_widget.setLayout(V_box_layout)
+        #self.container_widget.setFixedHeight(400)
 
-        V_box_main_layout=QVBoxLayout()
-        V_box_main_layout.addLayout(H_box_layout)       
+        # Create new Scroll area and set it as resizable
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+        
+        # Set the container widget as the widget for the scroll area
+        self.scroll_area.setWidget(self.container_widget)  
+        
+        main_v_box = QVBoxLayout()
+        main_v_box.addWidget(self.scroll_area)
+        #main_v_box.addLayout(self.V_box_layout)
 
-        self.setLayout(V_box_main_layout)
+        self.setLayout(main_v_box)     
+
 
 class Base_Comp_Ring_Gusset(QWidget):
 
@@ -33,16 +52,44 @@ class Base_Comp_Ring_Gusset(QWidget):
     def InitializeUI(self):
 
         self.set_styles()
-        self.SetUp_ip_GrpBox()#GropBox1
-        self.SetUp_intermediate_op_GrpBox()#GropBox2
+        #Create a input GroupBox1       
+        self.grpbox1 = QGroupBox("Input(Base Ring , Comp Ring , Gusset , Washer)",self)
+        #self.grpbox1.setFixedWidth(400)
+        self.grpbox1.setStyleSheet(self.ip_grpbox1_style)              
+        
+        
+        #Create Groupbox2 for Intermediat op
+        self.grpbox2 = QGroupBox("Intermediate Op",self)
+        #self.grpbox2.setFixedWidth(100)
+        self.grpbox2.setStyleSheet(self.ip_grpbox2_style)       
+        self.grpbox2.setDisabled(True)
+        
+        ##Hbox for ip and intermediiate op
         self.HBox_layout_ip =QHBoxLayout()         
         self.HBox_layout_ip.addWidget(self.grpbox1)
         self.HBox_layout_ip.addWidget(self.grpbox2)
-
         
-        self.HBox_layout_op=QHBoxLayout()
+        #Create Groupbox1 for op
+        self.grpbox1_op= QGroupBox("Base Plt-Comp Plt-Washer-Gusset",self)
+        #self.grpbox2_op.setFixedHeight(100)         
+        self.grpbox1_op.setStyleSheet(self.op_grpbox_style)  
+        
+        
+        #Create Groupbox2 for op
+        self.grpbox2_op=QGroupBox("Template",self)        
+        self.grpbox2_op.setStyleSheet(self.op_grpbox_style)               
+       
+        
+        ##Hbox for O/p 
+        self.HBox_layout_op=QHBoxLayout()       
+        self.HBox_layout_op.addWidget(self.grpbox1_op)
+        self.HBox_layout_op.addWidget(self.grpbox2_op,alignment=Qt.AlignmentFlag.AlignTop)   
+        
+        self.SetUp_ip_GrpBox()#GropBox1
+        self.SetUp_intermediate_op_GrpBox()#GropBox2
         self.SetUp_op_GrpBox1()#Groupbox3
-        self.HBox_layout_op.addWidget(self.grpbox1_op)     
+        self.SetUp_op_GrpBox2()#Groupbox4
+        
         
         self.Vbox_main_layout=QVBoxLayout()
         self.Vbox_main_layout.addLayout(self.HBox_layout_ip)
@@ -152,6 +199,9 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.cmb_box_washer_material =QComboBox()
         self.cmb_box_washer_material.addItems(self.material_list)
         
+        self.lbl_template_Thk=QLabel("Template Thk")
+        self.tb_template_Thk =QLineEdit("10")
+        
         
         
         #self.tb_thk_Comp_plt.setStyleSheet(self.ip_textbox_style)
@@ -195,16 +245,18 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.Input_Gridlayout.addWidget(self.tb_washer_Thk,8,1)
         self.Input_Gridlayout.addWidget(self.lbl_washer_material,8,2)
         self.Input_Gridlayout.addWidget(self.cmb_box_washer_material,8,3)
+        self.Input_Gridlayout.addWidget(self.lbl_template_Thk,9,0)
+        self.Input_Gridlayout.addWidget(self.tb_template_Thk,9,1)
         
        
         
        
         self.btn_calc_op=QPushButton("Calculate Output")
         self.btn_calc_op.clicked.connect(self.Calculate_Outputs)
-        self.Input_Gridlayout.addWidget(self.btn_calc_op,9,1,Qt.AlignmentFlag.AlignHCenter)
+        self.Input_Gridlayout.addWidget(self.btn_calc_op,11,1,Qt.AlignmentFlag.AlignHCenter)
 
-        #Create a GroupBox1 and set its layout to VBox_layout1
-        self.grpbox1 = QGroupBox("Input(Base Ring , Comp Ring , Gusset , Washer)",self)
+        #input grpbox1 layout to VBox_layout1
+        #self.grpbox1 = QGroupBox("Input(Base Ring , Comp Ring , Gusset , Washer)",self)
         self.grpbox1.setStyleSheet(self.ip_grpbox1_style)
         self.grpbox1.setLayout(self.Input_Gridlayout)
     
@@ -260,11 +312,9 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.VBox_layout2.addWidget(self.lbl_washer_dia)
         self.VBox_layout2.addWidget(self.tb_washer_dia)
 
-        #Create Groupbox2 and sets its layout to Vbox_layout2
-        self.grpbox2 = QGroupBox("Intermediate Op",self)
-        self.grpbox2.setStyleSheet(self.ip_grpbox2_style)
+        #Set Groupbox2 layout to Vbox_layout2 
         self.grpbox2.setLayout(self.VBox_layout2)
-        self.grpbox2.setDisabled(True)
+       
               
         
     def SetUp_op_GrpBox1(self):#Base Ring and Gusset
@@ -323,7 +373,7 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.tb_base_comp_ring_surface_area.setDisabled(True)
         self.btn_add_base_comp_ring_surface_area=QPushButton("Add")
         
-        
+      
         
 
         grid_layout1=QGridLayout()
@@ -363,16 +413,33 @@ class Base_Comp_Ring_Gusset(QWidget):
         grid_layout1.addWidget(self.tb_wt_washer,4,4)
         grid_layout1.addWidget(self.btn_add_wt_washer,4,5)
         
-        
-        
-       
-
-        self.grpbox1_op= QGroupBox("Base Plt-Comp Plt-Washer-Gusset",self)
-        
-        self.grpbox1_op.setStyleSheet(self.op_grpbox_style)  
         self.grpbox1_op.setLayout(grid_layout1)
         
+    def SetUp_op_GrpBox2(self):
         
+         #Template(ring+template)
+        self.lbl_ring_and_ring_template_wt=QLabel("Ring+Ring Template Wt")
+        self.tb_ring_and_ring_template_wt=QLineEdit("XXX")
+        self.tb_ring_and_ring_template_wt.setDisabled(True)
+        self.btn_ring_and_ring_template_wt=QPushButton("Add")
+        
+        #Template(box+template)
+        self.lbl_box_and_ring_template_wt=QLabel("Box+Ring Template Wt")
+        self.tb_box_and_ring_template_wt=QLineEdit("XXX")
+        self.tb_box_and_ring_template_wt.setDisabled(True)
+        self.btn_box_and_ring_template_wt=QPushButton("Add")
+        
+      
+
+        grid_layout2=QGridLayout()           
+        grid_layout2.addWidget(self.lbl_ring_and_ring_template_wt,0,0)
+        grid_layout2.addWidget(self.tb_ring_and_ring_template_wt,0,1)
+        grid_layout2.addWidget(self.btn_ring_and_ring_template_wt,0,2) 
+        grid_layout2.addWidget(self.lbl_box_and_ring_template_wt,1,0)
+        grid_layout2.addWidget(self.tb_box_and_ring_template_wt,1,1)
+        grid_layout2.addWidget(self.btn_box_and_ring_template_wt,1,2) 
+        self.grpbox2_op.setLayout(grid_layout2)
+         
 
 
     def Calculate_Outputs(self):
@@ -441,6 +508,9 @@ class Base_Comp_Ring_Gusset(QWidget):
         surface_area_gusset=gusset_ht*gusset_wd_at_top/1000/1000*No_of_gusset_plt*2
         surface_arae_base_comp_ring=round(surface_area_base_ring+surface_area_comp_ring+surface_area_gusset,1)
         
+        #Template
+        Wt_ring_and_ring_template=round(float(self.tb_template_Thk.text())*wt_base_ring/thk_base_plt*2,1)
+        Wt_box_and_ring_template=round(Wt_ring_and_ring_template*3/2*1.2,1)
         
         #Update OP groupboxes
         self.tb_wdth_Base_plt.setText(str(wdth_of_base_plt))
@@ -454,6 +524,10 @@ class Base_Comp_Ring_Gusset(QWidget):
         self.tb_wt_BOM_Comp_plt.setText(str(wt_BOM_comp_ring))
         self.tb_wt_washer.setText(str(wt_washer))
         self.tb_base_comp_ring_surface_area.setText(str(surface_arae_base_comp_ring))
+        
+        #Upxate Templaet OP groupbox
+        self.tb_ring_and_ring_template_wt.setText(str(Wt_ring_and_ring_template))
+        self.tb_box_and_ring_template_wt.setText(str(Wt_box_and_ring_template))
         
         #Define Button functionality
         self.btn_add_wt_Base_plt.clicked.connect(lambda:self.Add_wt_to_BOM(data=
@@ -502,6 +576,19 @@ class Base_Comp_Ring_Gusset(QWidget):
                                                             {'item':'Gusset',
                                                             'item_name':'Gusset'+str(self.Number),
                                                             'surface_area':str(surface_arae_base_comp_ring)                                                            
+                                                            }))
+        self.btn_ring_and_ring_template_wt.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                            {'item':'Ring+Ring_Template',
+                                                            'item_name':'Ring+Ring_Template'+str(self.Number),
+                                                            'wt':str(Wt_ring_and_ring_template),
+                                                             'material':self.cmb_box_material.currentText()                                                           
+                                                            }))
+        
+        self.btn_box_and_ring_template_wt.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                            {'item':'Box+Ring_Template',
+                                                            'item_name':'Box+Ring_Template'+str(self.Number),
+                                                            'wt':str(Wt_box_and_ring_template),
+                                                             'material':self.cmb_box_material.currentText()                                                           
                                                             }))
 
         
@@ -590,4 +677,270 @@ class Base_Comp_Ring_Gusset(QWidget):
         for button in self.grpbox1_op.findChildren(QPushButton):
             button.setStyleSheet("")  # Reset the color      
 
+class Nozzle_DEnd(QWidget):  
+    def __init__(self) -> None:
+        super().__init__()
+        self.InitializeUI()
+        
+    def InitializeUI(self):
+        self.grpbox_Nozzle=QGroupBox("Nozzle on Bottom D'ENd")
+        self.grpbox_Nozzle.setFixedWidth(800)
+        self.grpbox_Nozzle.setStyleSheet(Custom_Style.op_grpbox_style)        
+        self.SetUI_Nozzle()      
+        
+        self.Vbox_layout_Nozzle=QVBoxLayout()
+        self.Vbox_layout_Nozzle.addWidget(self.grpbox_Nozzle)
+        self.setLayout(self.Vbox_layout_Nozzle)
+        
+    def SetUI_Nozzle(self):
+              
+        self.lbl_nozzle_class=QLabel("Class")
+        self.lbl_nozzle_class.setStyleSheet("background-color:#ccffcc")
+        self.cmbbox_nozzle_class=QComboBox() 
+        self.cmbbox_nozzle_class.setStyleSheet("background-color:#ccffcc")
+        self.cmbbox_nozzle_class.addItems([str(item) for item in  var.Nozzle_class])
+        
+        self.lbl_nozzle_NPS=QLabel("NPS")
+        self.lbl_nozzle_NPS.setStyleSheet("background-color:#ccffcc")
+        self.cmbbox_nozzle_NPS=QComboBox()
+        self.cmbbox_nozzle_NPS.setStyleSheet("background-color:#ccffcc") 
+        self.cmbbox_nozzle_NPS.addItems([str(item) for item in  var.NPS_list])
+        
+        self.lbl_nozzle_schedule=QLabel("Schedule")
+        self.lbl_nozzle_schedule.setStyleSheet("background-color:#ccffcc")        
+        self.cmbbox_nozzle_schedule=QComboBox()
+        self.cmbbox_nozzle_schedule.setStyleSheet("background-color:#ccffcc") 
+        self.cmbbox_nozzle_schedule.addItems([str(item) for item in  var.Schedule_list])
+        
+        self.lbl_90LR_Elbow_wt=QLabel("Wt of 90LR Elbow")
+        self.tb_90LR_Elbow_wt=QLineEdit("XX")
+        self.tb_90LR_Elbow_wt.setEnabled(False)        
+        self.lbl_90LR_Elbow_material=QLabel("Material")
+        self.lbl_90LR_Elbow_material.setStyleSheet("background-color:#ccffcc") 
+        self.cmbbox_90LR_Elbow_material=QComboBox()
+        self.cmbbox_90LR_Elbow_material.setStyleSheet("background-color:#ccffcc") 
+        self.cmbbox_90LR_Elbow_material.addItems(var.master_mat_list)
+        self.btn_90LR_Elbow_wt=QPushButton("Add to BOM")
+        self.btn_90LR_Elbow_wt.setFixedWidth(120)   
+             
+        self.lbl_len_of_projection=QLabel("Proj. len from nozzle cntr")
+        self.lbl_len_of_projection.setStyleSheet("background-color:#ccffcc")
+        self.tb_len_of_projection=QLineEdit("730")
+        self.tb_len_of_projection.setStyleSheet("background-color:#ccffcc")
+        self.lbl_pipe_thk=QLabel("Pipe Thk")
+        self.tb_pipe_thk=QLineEdit("XX")
+        self.tb_pipe_thk.setEnabled(False)
+        
+        self.lbl_sleeve_pad_wt=QLabel("Wt of Sleeve Pad")
+        self.tb_sleeve_pad_wt=QLineEdit("XX")
+        self.tb_sleeve_pad_wt.setEnabled(False)
+        self.lbl_sleeve_pad_material=QLabel("Material")
+        self.lbl_sleeve_pad_material.setStyleSheet("background-color:#ccffcc")
+        self.cmbbox_sleeve_pad_material=QComboBox()
+        self.cmbbox_sleeve_pad_material.setStyleSheet("background-color:#ccffcc") 
+        self.cmbbox_sleeve_pad_material.addItems(var.master_mat_list)
+        self.btn_sleeve_pad_wt=QPushButton("Add to BOM")
+        self.btn_sleeve_pad_wt.setFixedWidth(120)  
+        
+        self.lbl_horz_pipe_wt=QLabel("Wt of Horz Pipe(B'DEnd)")
+        self.tb_horz_pipe_wt=QLineEdit("XX")
+        self.tb_horz_pipe_wt.setEnabled(False)
+        self.lbl_horz_pipe_material=QLabel("Material")
+        self.lbl_horz_pipe_material.setStyleSheet("background-color:#ccffcc")
+        self.cmbbox_horz_pipe_material=QComboBox() 
+        self.cmbbox_horz_pipe_material.setStyleSheet("background-color:#ccffcc")
+        self.cmbbox_horz_pipe_material.addItems(var.master_mat_list)
+        self.btn_horz_pipe_wt=QPushButton("Add to BOM")
+        self.btn_horz_pipe_wt.setFixedWidth(120) 
+        
+        self.lbl_pipe_open_pad_wt=QLabel("Wt of Pipe OPen Pad")
+        self.tb_pipe_open_pad_wt=QLineEdit("XX")
+        self.tb_pipe_open_pad_wt.setEnabled(False)
+        self.lbl_pipe_open_pad_material=QLabel("Material")
+        self.lbl_pipe_open_pad_material.setStyleSheet("background-color:#ccffcc")
+        self.cmbbox_pipe_open_pad_material=QComboBox()
+        self.cmbbox_pipe_open_pad_material.setStyleSheet("background-color:#ccffcc") 
+        self.cmbbox_pipe_open_pad_material.addItems(var.master_mat_list)
+        self.btn_pipe_open_pad_wt=QPushButton("Add to BOM")
+        self.btn_pipe_open_pad_wt.setFixedWidth(120)
+        
+        self.lbl_pipe_OD=QLabel("Pipe OD")
+        self.tb_pipe_OD=QLineEdit("XX")
+        self.tb_pipe_OD.setEnabled(False)
+        self.lbl_Flange_OD=QLabel("Flange OD")
+        self.tb_Flange_OD=QLineEdit("XX")
+        self.tb_Flange_OD.setEnabled(False) 
+        self.lbl_pipe_pad_Lg1=QLabel("Pipe Pad Lg1")
+        self.tb_pipe_pad_Lg1=QLineEdit("XX")
+        self.tb_pipe_pad_Lg1.setEnabled(False)
+        self.lbl_pipe_pad_Lg2=QLabel("Pipe Pad Lg2")
+        self.tb_pipe_pad_Lg2=QLineEdit("XX")
+        self.tb_pipe_pad_Lg2.setEnabled(False)
+        
+        self.btn_calc_Nozzle_op=QPushButton("Calculate Wt")
+        self.btn_calc_Nozzle_op.setFixedWidth(120)
+        self.btn_calc_Nozzle_op.clicked.connect(self.Calc_Nozzle_op)
+               
 
+        gridlayout_Nozzle=QGridLayout()
+        gridlayout_Nozzle.addWidget(self.lbl_nozzle_class,1,0)
+        gridlayout_Nozzle.addWidget(self.cmbbox_nozzle_class,1,1)        
+        gridlayout_Nozzle.addWidget(self.lbl_nozzle_NPS,1,2)
+        gridlayout_Nozzle.addWidget(self.cmbbox_nozzle_NPS,1,3)
+        gridlayout_Nozzle.addWidget(self.lbl_nozzle_schedule,2,0)
+        gridlayout_Nozzle.addWidget(self.cmbbox_nozzle_schedule,2,1)
+        gridlayout_Nozzle.addWidget(self.lbl_90LR_Elbow_material,2,2)       
+        gridlayout_Nozzle.addWidget(self.cmbbox_90LR_Elbow_material,2,3) 
+        gridlayout_Nozzle.addWidget(self.btn_calc_Nozzle_op,3,2)
+        gridlayout_Nozzle.addWidget(self.lbl_90LR_Elbow_wt,4,0)
+        gridlayout_Nozzle.addWidget(self.tb_90LR_Elbow_wt,4,1)        
+        gridlayout_Nozzle.addWidget(self.btn_90LR_Elbow_wt,4,2)
+        
+        gridlayout_Nozzle.addWidget(self.lbl_len_of_projection,6,0)
+        gridlayout_Nozzle.addWidget(self.tb_len_of_projection,6,1)
+        gridlayout_Nozzle.addWidget(self.lbl_pipe_thk,6,2)
+        gridlayout_Nozzle.addWidget(self.tb_pipe_thk,6,3)
+        
+        gridlayout_Nozzle.addWidget(self.lbl_Flange_OD,7,0)
+        gridlayout_Nozzle.addWidget(self.tb_Flange_OD,7,1)
+        gridlayout_Nozzle.addWidget(self.lbl_pipe_OD,7,2)
+        gridlayout_Nozzle.addWidget(self.tb_pipe_OD,7,3)        
+       
+        gridlayout_Nozzle.addWidget(self.lbl_pipe_pad_Lg1,8,0)
+        gridlayout_Nozzle.addWidget(self.tb_pipe_pad_Lg1,8,1)
+        gridlayout_Nozzle.addWidget(self.lbl_pipe_pad_Lg2,8,2)
+        gridlayout_Nozzle.addWidget(self.tb_pipe_pad_Lg2,8,3)
+        
+        gridlayout_Nozzle.addWidget(self.lbl_sleeve_pad_wt,9,0)
+        gridlayout_Nozzle.addWidget(self.tb_sleeve_pad_wt,9,1)
+        gridlayout_Nozzle.addWidget(self.cmbbox_sleeve_pad_material,9,2)
+        gridlayout_Nozzle.addWidget(self.btn_sleeve_pad_wt,9,3)
+        
+        gridlayout_Nozzle.addWidget(self.lbl_horz_pipe_wt,10,0)
+        gridlayout_Nozzle.addWidget(self.tb_horz_pipe_wt,10,1)
+        gridlayout_Nozzle.addWidget(self.cmbbox_horz_pipe_material,10,2)
+        gridlayout_Nozzle.addWidget(self.btn_horz_pipe_wt,10,3)
+        
+        gridlayout_Nozzle.addWidget(self.lbl_pipe_open_pad_wt,11,0)
+        gridlayout_Nozzle.addWidget(self.tb_pipe_open_pad_wt,11,1)
+        gridlayout_Nozzle.addWidget(self.cmbbox_pipe_open_pad_material,11,2)
+        gridlayout_Nozzle.addWidget(self.btn_pipe_open_pad_wt,11,3)
+         
+       
+       
+        
+        self.grpbox_Nozzle.setLayout(gridlayout_Nozzle)
+        
+    def Calc_Nozzle_op(self):
+       
+        elbow_detail=Get_Elbow_Details(nps=self.cmbbox_nozzle_NPS.currentText(),schedule=self.cmbbox_nozzle_schedule.currentText())
+        self.elbow_90LR_elbow_Wt=float(elbow_detail.Wt)
+        self.tb_90LR_Elbow_wt.setText(str(self.elbow_90LR_elbow_Wt))
+        
+        self.pipe_thk=float(elbow_detail.THK)
+        self.tb_pipe_thk.setText(str(self.pipe_thk))
+        
+        WN_FLG_detail=Get_WL_FLG_detail(nps=self.cmbbox_nozzle_NPS.currentText(),classs=self.cmbbox_nozzle_class.currentText())
+        
+        self.sleev_pad_wt=round(var.Skirt_thk*2*(float(WN_FLG_detail.flg_od)+20)*2*(float(WN_FLG_detail.flg_od)+20)*0.00000785,1)        
+        self.tb_sleeve_pad_wt.setText(str(self.sleev_pad_wt))
+        
+        self.proj_len=float(self.tb_len_of_projection.text())
+        self.tb_len_of_projection.setText(str(self.proj_len))
+        
+        self.Bot_DEnd_horz_pipe_wt=round((float(elbow_detail.WtPerMtr)*(self.proj_len-float(elbow_detail.Ht))-(float(WN_FLG_detail.flg_ht_wn_incld_rf)+20))/1000,1)
+        self.tb_horz_pipe_wt.setText(str(self.Bot_DEnd_horz_pipe_wt))
+        
+        self.pipe_OD=round(float(elbow_detail.NOZL_OD),1)
+        self.tb_pipe_OD.setText(str(self.pipe_OD))
+        
+        self.flg_od=math.ceil(float(WN_FLG_detail.flg_od)+2*self.pipe_thk)
+        self.tb_Flange_OD.setText(str(self.flg_od))
+        
+        self.pipe_pad_Lg1=math.ceil(self.flg_od+2*min(14,var.Skirt_thk+2)+2*(self.flg_od/2))
+        self.pipe_pad_Lg2=math.ceil(self.OPad_Lg(var.Skirt_ID,var.Skirt_thk,self.flg_od,(self.flg_od/2),min(14,var.Skirt_thk),self.pipe_thk,0))
+        self.tb_pipe_pad_Lg1.setText(str(self.pipe_pad_Lg1))
+        self.tb_pipe_pad_Lg2.setText(str(self.pipe_pad_Lg2))
+        
+        self.pipe_open_pad_wt=round(self.pipe_pad_Lg1*self.pipe_pad_Lg2*14*0.00000785,1)
+        self.tb_pipe_open_pad_wt.setText(str(self.pipe_open_pad_wt))
+        
+        #Define Button functionality
+        self.btn_90LR_Elbow_wt.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                                           {'item':'Bottom DEnd Nozzle Elbow',
+                                                                            'item_name':'Bottom DEnd Nozzle Elbow',
+                                                                            'wt':str(self.elbow_90LR_elbow_Wt),
+                                                                            'material':self.cmbbox_90LR_Elbow_material.currentText()
+                                                                            }))
+        self.btn_sleeve_pad_wt.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                                           {'item':'Bottom DEnd Nozzle Sleeve Pad',
+                                                                            'item_name':'Bottom DEnd Nozzle Sleeve Pad',
+                                                                            'wt':str(self.sleev_pad_wt),
+                                                                            'material':self.cmbbox_sleeve_pad_material.currentText()
+                                                                            }))
+        self.btn_horz_pipe_wt.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                                           {'item':'Bottom DEnd Horz Pipe',
+                                                                            'item_name':'Bottom DEnd Horz Pipe',
+                                                                            'wt':str(self.Bot_DEnd_horz_pipe_wt),
+                                                                            'material':self.cmbbox_horz_pipe_material.currentText()
+                                                                            }))
+        self.btn_pipe_open_pad_wt.clicked.connect(lambda:self.Add_wt_to_BOM(data=
+                                                                           {'item':'Bottom DEnd Pipe Opening Pad',
+                                                                            'item_name':'Bottom DEnd Pipe Opening Pad',
+                                                                            'wt':str(self.pipe_open_pad_wt),
+                                                                            'material':self.cmbbox_pipe_open_pad_material.currentText()
+                                                                            }))
+        
+        self.reset_button_color_default()#Reset the color of Add  to BOM as Weight value got changed.
+        
+    def Add_wt_to_BOM(self,data):        
+        _projectcontroller=ProjectController()
+        _projectcontroller.add_update_item(item=data['item'],item_name=data['item_name'],wt=data['wt'],material=data['material'])
+        print(data)
+        self.change_button_color_green()        
+        
+    @staticmethod   
+    def OPad_Lg(ID, Thk, NOD, PadWd, PadThk, NozlThk, OffDist):
+    #  'This Function is used to cal. Pad Lg1. of OffSetNozl.
+    # ' a stands for angle
+
+        ShellOR = ID / 2 + Thk
+        AE = ShellOR + PadThk
+        DE = OffDist - (NOD / 2)
+        x = math.sqrt(AE ** 2 - DE ** 2)
+        a1 = math.atan(DE / x)
+        GF = OffDist + (NOD / 2)
+        AF = (ID / 2) + Thk
+        y = math.sqrt(AF ** 2 - GF ** 2)
+        a2 = math.atan(GF / y)
+        a = a2 - a1
+        PADMR = ShellOR + (PadThk / 2)
+        OPad_Lg = a * PADMR + 2 * PadWd   
+        return OPad_Lg 
+
+    #This function changes the coor of sender button to green
+    def change_button_color_green(self):
+            button = self.sender()
+            button.setStyleSheet("background-color: green; color: white;")
+
+    #This Function reset the color of "button" passed as an argument.
+    def reset_button_color_default(self):
+            #button = self.sender()
+            for button in self.grpbox_Nozzle.findChildren(QPushButton):
+                button.setStyleSheet("")  # Reset the color      
+
+
+
+
+class Custom_Style:
+    op_grpbox_style="""
+                QGroupBox {
+                    font: bold;
+                    font-size:14px;
+                    padding: 15px;
+                    border: 1px solid silver;
+                    border-radius: 6px;
+                    margin-top: 5px;
+                    background-color:lightgrey                     
+
+        } """  

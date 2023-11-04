@@ -30,10 +30,13 @@ Inner_plate_mat_list=['SA516Gr.60','SA516Gr.60(N)','SA516GR.60(NACE)','SA516Gr.6
                       'SA105','SA105(NACE)','SA105(CLAD)','SA106Gr.B','SA106Gr.B(NACE)','SA106Gr.B(CLAD)','SA234Gr.WPB',
                       'SA234Gr.WPB+CLAD','SA240TP304L','IS2062Gr.B']
 
+Nozzle_class=[150,300,600,900]
 NPS_list=[3,6,10,15,20,25,40,50,65,80,90,100,125,150,200,250,300,350,400,450,500,550,600]
-Schedule_list=[5, 10, 20, 30, 40, 60, 80, 100, 120, 140, 160, 'Std.', 'Ext. Strong', 'Dbl. Ext Strong']
+Schedule_list=[None,5, 10, 20, 30, 40, 60, 80, 100, 120, 140, 160, 'Std.', 'Ext. Strong', 'Dbl. Ext Strong']
 avl_plate_width_for_DEND=list(map(str,[x for x in range(2500,13500,500)]))
 
+Skirt_ID=0.0
+Skirt_thk=0.0
 
 #Will Save Estimation and Surface Area in a List
 Estimation_Schema={

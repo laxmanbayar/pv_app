@@ -4,7 +4,7 @@ from sqlalchemy.sql import cast
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.declarative import declarative_base
-from DataBase.common_models import Project,User,Elbow,Skirt_Base
+from DataBase.common_models import Project,User,Elbow,Skirt_Base,WN_FLG,Long_WN_FLG,Saddle,Saddle_Dim,Vessel,Side_downcomer,Center_offcenter_downcomer
 from DataBase.DB_config import DB_config_class
 from Variables import var
 #from DataBase.project_specific_model import Estimation,Surface_Area
@@ -157,7 +157,7 @@ def get_current_project_details(project_id):
 def Get_Elbow_Details(nps,schedule):
     try:
         elbow_detail=session.query(Elbow).filter(and_ (Elbow.NPS==nps , Elbow.SCHEDULE==schedule)).all()
-        return float(elbow_detail[0].WtPerMtr)
+        return elbow_detail[0]
    
     except Exception as e:
         session.rollback()       
@@ -174,4 +174,76 @@ def Get_gusset_detail(bolt_size):
         session.rollback()  
     # end try
     
+def Get_WL_FLG_detail(classs,nps):
+    try:
+        #As data may not be sorted in the table
+        results = session.query(WN_FLG).filter(and_(WN_FLG.nps==nps , WN_FLG.classs==classs)).all()
+        #sort the result based on Bolt columns(as data in the database table may not be sorted)
+        #sorted_result = sorted(results, key=lambda x: int(x.Bolt))
+        return results[0]
+    except Exception as e:
+        print(e)
+        session.rollback()  
+    # end try    
+def Get_Shell_ODs_from_Saddle_Data():
+    try:
+        shell_ODs = session.query(Saddle.D).all()        
+        shell_ODs_list=[int(shell_OD[0]) for shell_OD in shell_ODs]  
+        shell_ODs_list.sort()      
+        return shell_ODs_list      
+    except Exception as e:
+        print(e)
+        session.rollback() 
+        
+def Get_Saddle_Data(shell_OD):
+    try: 
+        #Get Nearest OD Value from the database and then return that row having nearest value    
+        req_od = session.query(Saddle.D).order_by(func.abs(cast(Saddle.D,Integer) - shell_OD)).limit(1).scalar()
+        result = session.query(Saddle).filter(Saddle.D==req_od).all()
+        return result[0]
+    except Exception as e:
+        print(e)
+        session.rollback()          
+
+def Get_Saddle_Dim_Data(saddle_type):
+    try:       
+        results = session.query(Saddle_Dim).filter(Saddle_Dim.Type==saddle_type).all()       
+        return results[0]
+    except Exception as e:
+        print(e)
+        session.rollback() 
+        
+def Get_Vessel_Data(Vessel_OD):
+    try:      
+         #Get Nearest OD Value from the database and then return that row having nearest value  
+        req_od = session.query(Vessel.OD) \
+                        .order_by(func.abs(cast(Vessel.OD,Integer) - Vessel_OD)) \
+                        .limit(1) \
+                        .scalar()
+        results = session.query(Vessel).filter(Vessel.OD == req_od).all()                    
+        return results[0]
+    except Exception as e:
+        print(e)
+        session.rollback()                      
+        
+def Get_DownComer_Data(Vessel_Dia,is_side):
+    try: 
+        if(is_side):     
+            #Get Nearest OD Value from the database and then return that row having nearest value  
+            req_od = session.query(Side_downcomer.Vessel_ID_upto) \
+                            .order_by(func.abs(cast(Side_downcomer.Vessel_ID_upto,Integer) - Vessel_Dia)) \
+                            .limit(1) \
+                            .scalar()
+            results = session.query(Side_downcomer).filter(Side_downcomer.Vessel_ID_upto == req_od).all()                    
+            return results[0]
+        else:
+            req_od = session.query(Center_offcenter_downcomer.Vessel_ID_upto) \
+                            .order_by(func.abs(cast(Center_offcenter_downcomer.Vessel_ID_upto,Integer) - Vessel_Dia)) \
+                            .limit(1) \
+                            .scalar()
+            results = session.query(Center_offcenter_downcomer).filter(Center_offcenter_downcomer.Vessel_ID_upto == req_od).all()                    
+            return results[0]
             
+    except Exception as e:
+        print(e)
+        session.rollback()         

@@ -101,6 +101,7 @@ class Project_Selection(QWidget): #QMainWIndow
         
         self.rb1_existing_project.setChecked(True)
         self.rb1_existing_project.click()#This will Trigger the Update UI on form load
+        self.cmbbox_project_selection.setCurrentIndex(3)
         #self.update_UI()
         
     def get_existing_projects_list(self):

@@ -60,7 +60,7 @@ class Tab_Shell(QWidget):
         main_v_box.addWidget(self.scroll_area)
 
         self.setLayout(main_v_box)
-        self.cmbbox_No_of_shell.setCurrentIndex(1)
+        self.cmbbox_No_of_shell.setCurrentIndex(2)
 
     def Set_No_of_Shell(self):
         
@@ -193,7 +193,8 @@ class Shell(QWidget):
         print("Add Shell Material to BOM Pressed")
         self.change_button_color_green()
 
-    def calculate_allwnce_on_dia(_,ID, T):
+    @staticmethod
+    def calculate_allwnce_on_dia(ID, T):
         OD = ID + 2 * T
             
         if T > 100:

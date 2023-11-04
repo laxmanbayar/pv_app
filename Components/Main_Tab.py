@@ -14,6 +14,10 @@ from Components.BOM import Tab4_BOM
 from Components.Shell import Tab_Shell
 from Components.Misc import Tab_Misc
 from Components.Skirt import Tab_Skirt
+from Components.Saddles import Tab_Saddles
+from Components.Fire_inslulation import Tab_Fire_Insl
+from Components.WireMesh_Demister import Tab_WireMesh_Demister
+from Components.BB_TSR import Tab_BB_TSR
 
 
 
@@ -33,8 +37,13 @@ class MainTabPage(QWidget):
         DishEnd_tab = Tab_DEnd()
         Shell_tab=Tab_Shell()
         Misc=Tab_Misc()
-        Base_comp_ring_tab=Tab_Base_Comp_Ring()
         Skirt_tab=Tab_Skirt()
+        Base_comp_ring_tab=Tab_Base_Comp_Ring()
+        Saddles=Tab_Saddles()
+        Fire_Insl=Tab_Fire_Insl()
+        WireMesh_Demister=Tab_WireMesh_Demister()
+        BB_TSR=Tab_BB_TSR()
+        
         BOM_tab = Tab4_BOM()
         
 
@@ -44,8 +53,14 @@ class MainTabPage(QWidget):
         tab_widget.addTab(DishEnd_tab, "Dish End")
         tab_widget.addTab(Shell_tab, "Shell")
         tab_widget.addTab(Misc, "Misc.")
-        tab_widget.addTab(Base_comp_ring_tab, "Base Comp. Ring")
         tab_widget.addTab(Skirt_tab, "Skirt")
+        tab_widget.addTab(Base_comp_ring_tab, "Base Comp. Ring DEnd_Nozzle")
+        tab_widget.addTab(Saddles, "Saddle")
+        tab_widget.addTab(Fire_Insl, "Fire Insul.")
+        tab_widget.addTab(WireMesh_Demister, "WireMesh Demister")
+        tab_widget.addTab(BB_TSR, "BB TSR")
+        
+       
         tab_widget.addTab(BOM_tab, "BOM")
 
         

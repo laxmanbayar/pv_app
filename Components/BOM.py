@@ -16,15 +16,20 @@ class Tab4_BOM(QWidget):
         self.InitializeUI()
         
     def InitializeUI(self):
-        self.V_box_layout= QVBoxLayout() 
+        self.V_box_layout= QVBoxLayout()
+        self.btn_refresh_data=QPushButton("Refresh Data")
+        self.btn_refresh_data.setFixedSize(120,30)
+        self.btn_refresh_data.setStyleSheet("background-color:lightgrey")
+        self.btn_refresh_data.clicked.connect(self.Refresh_Data)
+        self.V_box_layout.addWidget(self.btn_refresh_data,1,Qt.AlignmentFlag.AlignRight)
+        self.Refresh_Data() 
         
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.Refresh_Data)
-        self.timer.start(2000)  # Update every 2 seconds       
-        # self.Estimation=Estimation_Detail()
-        # self.SurfaceArea=SurfaceArea_Detail()
         
-
+        
+        # self.timer = QTimer()
+        # self.timer.timeout.connect(self.Refresh_Data)
+        # self.timer.start(10000)  # Update every 2 seconds       
+       
         self.V_box_main_layout=QVBoxLayout()       
         self.V_box_main_layout.addLayout(self.V_box_layout)
        

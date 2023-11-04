@@ -182,8 +182,95 @@ class Material(Base):
    #id=Column(Integer)╠
    material = Column(String(100),primary_key=True)  
    
-
-
+class WN_FLG(Base):
+    __tablename__="ASME_B16_5_WN_FLG"  
+    ref = Column(String(50), primary_key=True)
+    classs = Column(String(50))
+    nps=Column(String(50))
+    flg_od=Column(String(50))
+    flg_thk_incld_rf=Column(String(50))
+    flg_ht_wn_incld_rf=Column(String(50))
+    flg_wt_wn=Column(String(50))
+    flg_wt_bld=Column(String(50))
+    studs_qty=Column(String(50))
+    size_stud=Column(String(100))
+    stud_wt=Column(String(50))
+    nut_wt=Column(String(50))
+    pipe_od=Column(String(50))
+    
+class Long_WN_FLG(Base):
+    __tablename__="ASME_B16_5_Long_WN_FLG"  
+    ref = Column(String(50), primary_key=True)
+    nps=Column(String(50))
+    classs = Column(String(50))    
+    bore=Column(String(50))
+    neck_od=Column(String(50))
+    len_std=Column(String(50))
+    std_lg_for_flg_wt=Column(String(50))
+    flg_od=Column(String(50))
+    flg_thk_incld_rf=Column(String(50))
+    std_No_with_ser=Column(String(50))
+    std_No_wo_ser=Column(String(50))
+    studs_qty=Column(String(50))
+    size_stud=Column(String(100))
+    stud_wt=Column(String(50))
+    nut_wt=Column(String(50))
+    stud_plus_2_Nuts=Column(String(50))
+    fastners_per_flg=Column(String(50))
+    surf_area=Column(String(50))
+     
+class Saddle(Base):
+    __tablename__="Saddle"  
+    D = Column(String(50), primary_key=True)
+    LB=Column(String(50)) 
+    H=Column(String(50)) 
+    L1=Column(String(50)) 
+    L2=Column(String(50)) 
+    Type=Column(String(50)) 
+    Max_load=Column(String(50)) 
+    approx_wt=Column(String(50)) 
+    rib_wt=Column(String(50))    
+    
+class Saddle_Dim(Base):
+    __tablename__="Saddle_Dim"  
+    Type = Column(String(50), primary_key=True)
+    t1=Column(String(50)) 
+    t2=Column(String(50)) 
+    L3=Column(String(50)) 
+    t3=Column(String(50)) 
+    
+class Leg_support2(Base):
+    __tablename__="Leg_support2"  
+    Pipe_size = Column(String(100), primary_key=True)
+    A=Column(String(50)) 
+    B=Column(String(50)) 
+    C=Column(String(50)) 
+    E=Column(String(50))
+    t=Column(String(50))
+    L2000_max_load=Column(String(50))
+    L2500_max_load=Column(String(50))
+    L3000_max_load=Column(String(50))
+    
+    
+class Vessel(Base):
+    __tablename__="Vessel"  
+    OD = Column(String(100), primary_key=True)
+    A=Column(String(50)) 
+    B=Column(String(50)) 
+    C=Column(String(50)) 
+    E=Column(String(50))
+    F=Column(String(50))
+    G=Column(String(50)) 
+    H=Column(String(50)) 
+    J=Column(String(50)) 
+    Min_M=Column(String(50)) 
+    Min_Anc_Dia=Column(String(50)) 
+    X=Column(String(50)) 
+    Max_allow_Wt=Column(String(50)) 
+    #Pad_Wt=Column(String(50)) 
+    #Base_Plt_Wt=Column(String(50)) 
+    #Gusset_Wt=Column(String(50))               
+   
 # Create tables
 Base.metadata.create_all(engine)
 

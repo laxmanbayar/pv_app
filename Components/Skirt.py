@@ -71,6 +71,7 @@ class Skirt(QWidget):
         
         self.groupbox_skirt_ip=QGroupBox("Skirt(Input)")
         self.groupbox_skirt_ip.setFixedHeight(150)
+        self.groupbox_skirt_ip.setStyleSheet(set_styles.ip_grpbox1_style)
         self.groupbox_skirt_ip.setLayout(self.gridlayout)
         
    
@@ -138,6 +139,7 @@ class Skirt_Section(QWidget):
         
     def InitiailizeUI(self):
         self.grpbox_skirt_sec=QGroupBox(f"Skirt Sec{self.Number}")
+        self.grpbox_skirt_sec.setStyleSheet(set_styles.ip_grpbox1_style)
         self.gridlayout_skirt_sec=QGridLayout()
         self.gridlayout_skirt_sec.setVerticalSpacing(20)
         self.grpbox_skirt_sec.setLayout(self.gridlayout_skirt_sec)
@@ -209,12 +211,28 @@ class Skirt_Section(QWidget):
         _ProjectConroller.add_update_item(item="Skirt",
                                           item_name= f"Skirt_Sec{self.Number}",
                                           wt=self.tb_skirt_sec_wt.text(),
-                                          material=self.cmbbox_skirt_sec_material.currentText())    
+                                          material=self.cmbbox_skirt_sec_material.currentText()) 
+        self.change_button_color_green()
+        
+           
     def Add_to_BOM_SurfaceArea(self):
         _ProjectConroller=ProjectController()        
         _ProjectConroller.add_update_surface_area(item="Skirt",
                                           item_name= f"Skirt_Sec{self.Number}",
                                           surface_area=self.tb_skirt_sec_surfaceArea.text())  
+        self.change_button_color_green()
+    
+     #This function changes the coor of sender button to green
+    def change_button_color_green(self):
+        button = self.sender()
+        button.setStyleSheet("background-color: green; color: white;")
+
+    #This Function reset the color of "button" passed as an argument.
+    def reset_button_color_default(self,button):
+        #button = self.sender()
+        button.setStyleSheet("") 
+        
+    
     
 class Skirt_AO(QWidget):
     def __init__(self) -> None:
@@ -224,11 +242,13 @@ class Skirt_AO(QWidget):
     def InitializeUI(self):
         #Input GroupBox and Layout
         self.grpbox_sec_AO_ip=QGroupBox("Section Access Opening(AO) Input")
+        self.grpbox_sec_AO_ip.setStyleSheet(set_styles.ip_grpbox1_style)
         self.gridlayout_sec_AO_ip=QGridLayout()
         self.grpbox_sec_AO_ip.setLayout(self.gridlayout_sec_AO_ip)
         
         #Output GroupBox and Layout
         self.grpbox_sec_AO_op=QGroupBox("Section Access Opening(AO) Output")
+        self.grpbox_sec_AO_op.setStyleSheet(set_styles.ip_grpbox1_style)
         self.gridlayout_sec_AO_op=QGridLayout()
         self.grpbox_sec_AO_op.setLayout(self.gridlayout_sec_AO_op)
         
@@ -310,43 +330,53 @@ class Skirt_AO(QWidget):
         
         #Set Gridlayout
         #Input
+        a=0
         lbl_AO_input=QLabel("AO Input")
         lbl_AO_input.setStyleSheet("font:bold")
-        self.gridlayout_sec_AO_ip.addWidget(lbl_AO_input,0,0)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_Insulation_thk,2,0)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_Insulation_thk,2,1)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_FireProof_thk,2,2)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_FireProof_thk,2,3)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_AO_inside_dia,3,0)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_AO_inside_dia,3,1)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_len_of_AO,3,2)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_len_of_AO,3,3)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_No_of_AO,3,4)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_No_of_AO,3,5)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_pad_thk,4,0)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_pad_thk,4,1)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_AO_cvr_plt_thk,5,0)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_AO_cvr_plt_thk,5,1)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_No_of_AO_handles,5,2)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_No_of_AO_handles,5,3)       
-        self.gridlayout_sec_AO_ip.addWidget(self.btn_calculate_sec_AO_op,6,2,alignment=Qt.AlignmentFlag.AlignCenter)
+        self.gridlayout_sec_AO_ip.addWidget(lbl_AO_input,a,0)
+        a+=1
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_Insulation_thk,a,0)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_Insulation_thk,a,1)
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_FireProof_thk,a,2)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_FireProof_thk,a,3)
+        a+=1
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_AO_inside_dia,a,0)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_AO_inside_dia,a,1)
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_len_of_AO,a,2)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_len_of_AO,a,3)
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_No_of_AO,a,4)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_No_of_AO,a,5)
+        a+=1
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_pad_thk,a,0)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_pad_thk,a,1)
+        a+=1
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_AO_cvr_plt_thk,a,0)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_AO_cvr_plt_thk,a,1)
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_No_of_AO_handles,a,2)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_No_of_AO_handles,a,3)  
+        a+=1     
+        self.gridlayout_sec_AO_ip.addWidget(self.btn_calculate_sec_AO_op,a,2,alignment=Qt.AlignmentFlag.AlignCenter)
         
-        #Intermediate OP        
-        self.gridlayout_sec_AO_ip.addItem(QSpacerItem(30, 30),8, 0,alignment=Qt.AlignmentFlag.AlignCenter)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_thk_of_AO,9,0)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_thk_of_AO,9,1)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_pad_wdth,9,2)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_pad_wdth,9,3)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_pad_len,9,4)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_pad_len,9,5)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_in_out_projection,10,0)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_in_out_projection,10,1)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_AO_cvr_plt_dia,11,0)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_AO_cvr_plt_dia,11,1)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_AO_handle_size,11,2)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_AO_handle_size,11,3)
-        self.gridlayout_sec_AO_ip.addWidget(self.lbl_AO_cvr_side_ring,11,4)
-        self.gridlayout_sec_AO_ip.addWidget(self.tb_AO_cvr_side_ring,11,5)
+        #Intermediate OP  
+        a+=1      
+        self.gridlayout_sec_AO_ip.addItem(QSpacerItem(30, 30),a, 0,alignment=Qt.AlignmentFlag.AlignCenter)
+        a+=1
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_thk_of_AO,a,0)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_thk_of_AO,a,1)
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_pad_wdth,a,2)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_pad_wdth,a,3)
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_pad_len,a,4)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_pad_len,a,5)
+        a+=1
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_in_out_projection,a,0)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_in_out_projection,a,1)
+        a+=1
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_AO_cvr_plt_dia,a,0)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_AO_cvr_plt_dia,a,1)
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_AO_handle_size,a,2)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_AO_handle_size,a,3)
+        self.gridlayout_sec_AO_ip.addWidget(self.lbl_AO_cvr_side_ring,a,4)
+        self.gridlayout_sec_AO_ip.addWidget(self.tb_AO_cvr_side_ring,a,5)
         
                  
            
@@ -437,64 +467,75 @@ class Skirt_AO(QWidget):
         ####Layout Setting
         
         #AO Pipe Layout
+        a=0
         lbl_AO_pipe=QLabel("AO Pipe")
         lbl_AO_pipe.setStyleSheet("font:bold")
-        self.gridlayout_sec_AO_op.addWidget(lbl_AO_pipe,0,0)
-
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_thk,1,0)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pipe_thk,1,1)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_wdth,1,2)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pipe_wdth,1,3)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_len,1,4)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pipe_len,1,5)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_material,1,6)
-        self.gridlayout_sec_AO_op.addWidget(self.cmbbox_AO_pipe_material,1,7)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_Wt,2,0)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pipe_Wt,2,1)        
-        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_pipe_wt,2,2)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_Wt_BOM,3,0)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pipe_Wt_BOM,3,1)
-        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_pipe_wt_BOM,3,2)
+        self.gridlayout_sec_AO_op.addWidget(lbl_AO_pipe,a,0)
+        a+=1
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_thk,a,0)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pipe_thk,a,1)
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_wdth,a,2)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pipe_wdth,a,3)
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_len,a,4)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pipe_len,a,5)
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_material,a,6)
+        self.gridlayout_sec_AO_op.addWidget(self.cmbbox_AO_pipe_material,a,7)
+        a+=1
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_Wt,a,0)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pipe_Wt,a,1)        
+        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_pipe_wt,a,2)
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pipe_Wt_BOM,a,0)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pipe_Wt_BOM,a,1)
+        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_pipe_wt_BOM,a,2)
         
         ##AO Pad layout
+        a+=1
         lbl_AO_pad=QLabel("AO Pad")
         lbl_AO_pad.setStyleSheet("font:bold")
-        self.gridlayout_sec_AO_op.addWidget(lbl_AO_pad,6,0)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_thk,7,0)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pad_thk,7,1)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_wdth,7,2)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pad_wdth,7,3)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_len,7,4)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pad_len,7,5)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_material,7,6)
-        self.gridlayout_sec_AO_op.addWidget(self.cmbbox_AO_pad_material,7,7)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_Wt,8,0)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pad_Wt,8,1)      
-        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_pad_wt,8,2)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_Wt_BOM,9,0)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pad_Wt_BOM,9,1)
-        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_pad_wt_BOM,9,2)
+        self.gridlayout_sec_AO_op.addWidget(lbl_AO_pad,a,0)
+        a+=1
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_thk,a,0)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pad_thk,a,1)
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_wdth,a,2)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pad_wdth,a,3)
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_len,a,4)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pad_len,a,5)
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_material,a,6)
+        self.gridlayout_sec_AO_op.addWidget(self.cmbbox_AO_pad_material,a,7)
+        a+=1
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_Wt,a,0)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pad_Wt,a,1)      
+        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_pad_wt,a,2)
+        a+=1
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_pad_Wt_BOM,a,0)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_pad_Wt_BOM,a,1)
+        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_pad_wt_BOM,a,2)
         
         
         #AO Cover hand Handle Layout
+        a+=1
         lbl_AO_cover_and_handle=QLabel("AO Cover & Handle")
         lbl_AO_cover_and_handle.setStyleSheet("font:bold")
-        self.gridlayout_sec_AO_op.addWidget(lbl_AO_cover_and_handle,10,0)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_cover_Wt,11,0)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_cover_Wt,11,1)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_cover_material,11,2)
-        self.gridlayout_sec_AO_op.addWidget(self.cmbbox_AO_cover_material,11,3)
-        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_cover_wt,11,4)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_cover_handle_Wt,12,0)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_cover_handle_Wt,12,1)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_cover_handle_material,12,2)
-        self.gridlayout_sec_AO_op.addWidget(self.cmbbox_AO_cover_handle_material,12,3)
-        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_cover_handle_Wt,12,4)
+        self.gridlayout_sec_AO_op.addWidget(lbl_AO_cover_and_handle,a,0)
+        a+=1
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_cover_Wt,a,0)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_cover_Wt,a,1)
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_cover_material,a,2)
+        self.gridlayout_sec_AO_op.addWidget(self.cmbbox_AO_cover_material,a,3)
+        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_cover_wt,a,4)
+        a+=1
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_cover_handle_Wt,a,0)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_cover_handle_Wt,a,1)
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_cover_handle_material,a,2)
+        self.gridlayout_sec_AO_op.addWidget(self.cmbbox_AO_cover_handle_material,a,3)
+        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_cover_handle_Wt,a,4)
         
-        self.gridlayout_sec_AO_op.addItem(QSpacerItem(30, 30),13, 0,alignment=Qt.AlignmentFlag.AlignCenter)
-        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_surface_area,14,0)
-        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_surface_area,14,1)
-        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_SurfaceArea,14,2)
+        a+=1
+        self.gridlayout_sec_AO_op.addItem(QSpacerItem(30, 30),a, 0,alignment=Qt.AlignmentFlag.AlignCenter)
+        a+=1
+        self.gridlayout_sec_AO_op.addWidget(self.lbl_AO_surface_area,a,0)
+        self.gridlayout_sec_AO_op.addWidget(self.tb_AO_surface_area,a,1)
+        self.gridlayout_sec_AO_op.addWidget(self.btn_add_AO_SurfaceArea,a,2)
         
    
         
@@ -581,9 +622,8 @@ class Skirt_AO(QWidget):
             _projectcontroller.add_update_item(item="AO Cover",item_name="AO Cover",wt=self.tb_AO_cover_Wt.text(),material=self.cmbbox_AO_cover_material.currentText())     
         elif(self.sender()==self.btn_add_AO_cover_handle_Wt) :
             _projectcontroller.add_update_item(item="AO Cover Handle",item_name="AO Cover Handle",wt=self.tb_AO_cover_handle_Wt.text(),material=self.cmbbox_AO_cover_handle_material.currentText())  
-        
-        
-            
+   
+        self.change_button_color_green()
     @staticmethod
     def IPad_Lg(ID, AOID, T1, T, W):
         #' ID = Inner Dia of Shell, AOID = Access Opening ID, T1 = Thickness of Ao, T = Thickenss of Pad, W = Pad Width 
@@ -598,3 +638,42 @@ class Skirt_AO(QWidget):
         Lg = (2 * alpha * MR) + (2 * W)
         IPad_Lg = round(Lg + 0.5, 0) 
         return IPad_Lg  
+    
+     #This function changes the coor of sender button to green
+    def change_button_color_green(self):
+        button = self.sender()
+        button.setStyleSheet("background-color: green; color: white;")
+
+    #This Function reset the color of "button" passed as an argument.
+    def reset_button_color_default(self,button):
+        #button = self.sender()
+        button.setStyleSheet("") 
+        
+        
+class set_styles:    
+    op_vbox_style="""
+                QVBoxLayout {
+                    font: bold;
+                    font-size:14px;
+                    padding: 15px;
+                    border: 1px solid silver;
+                    border-radius: 6px;
+                    margin-top: 5px;
+                    background-color:lightgrey                     
+
+                }
+             
+              
+                """   
+    ip_grpbox1_style="""
+                QGroupBox {
+                    font: bold;
+                    font-size:14px;
+                    padding: 15px;
+                    border: 1px solid silver;
+                    border-radius: 6px;
+                    background-color:#ccffcc
+                                        
+                }
+                          
+                """        

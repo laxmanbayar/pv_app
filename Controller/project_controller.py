@@ -4,7 +4,8 @@ from sqlalchemy.sql import cast
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.declarative import declarative_base
-from DataBase.common_models import Project,User,Elbow,Skirt_Base,WN_FLG,Long_WN_FLG,Saddle,Saddle_Dim,Vessel,Side_downcomer,Center_offcenter_downcomer
+from DataBase.common_models import Project,User,Elbow,Skirt_Base,WN_FLG,Long_WN_FLG,Saddle,Saddle_Dim,Vessel,Side_downcomer\
+                            ,Center_offcenter_downcomer,Pipe1,Pipe2
 from DataBase.DB_config import DB_config_class
 from Variables import var
 #from DataBase.project_specific_model import Estimation,Surface_Area
@@ -247,3 +248,22 @@ def Get_DownComer_Data(Vessel_Dia,is_side):
     except Exception as e:
         print(e)
         session.rollback()         
+        
+def Get_Pipe1_Data(A,C):
+    try:
+        #As data may not be sorted in the table
+        results = session.query(Pipe1).filter(and_(Pipe1.A==A , Pipe1.C==C)).all()        
+        return results[0]
+    except Exception as e:
+        print(e)
+        session.rollback()  
+        
+            
+def Get_Pipe2_Data(Classs,NPS):
+    try:
+        #As data may not be sorted in the table
+        results = session.query(Pipe2).filter(and_(Pipe2.CLASS==Classs , Pipe2.NPS==NPS)).all()        
+        return results[0]
+    except Exception as e:
+        print(e)
+        session.rollback()          

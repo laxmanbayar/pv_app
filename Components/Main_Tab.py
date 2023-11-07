@@ -51,8 +51,7 @@ class MainTabPage(QWidget):
 
         # Add tabs to the tab widget
         tab_widget.addTab(DishEnd_tab, "Dish End")
-        tab_widget.addTab(Shell_tab, "Shell")
-        tab_widget.addTab(Misc, "Misc.")
+        tab_widget.addTab(Shell_tab, "Shell")        
         tab_widget.addTab(Skirt_tab, "Skirt")
         tab_widget.addTab(Base_comp_ring_tab, "Base Comp. Ring DEnd_Nozzle")
         tab_widget.addTab(Saddles, "Saddle")
@@ -60,7 +59,7 @@ class MainTabPage(QWidget):
         tab_widget.addTab(WireMesh_Demister, "WireMesh Demister")
         tab_widget.addTab(BB_TSR, "BB TSR")
         
-       
+        tab_widget.addTab(Misc, "Misc.")
         tab_widget.addTab(BOM_tab, "BOM")
 
         

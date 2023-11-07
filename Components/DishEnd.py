@@ -72,18 +72,19 @@ class Tab_DEnd(QWidget):
 
 
     def SetUp_default_DEND_on_form_load(self):
-        #On form load this function will add both top and bototm Dish end as "BLANK" type as default.
+        #On form load this function will add both top ("Crown and Petal type") and bototm Dish end as ("BLANK" type) as default.
         self.VBox_all_grp_box_layout.addWidget(self.Top_DishEnd_selction)
-        self.Top_Dish_End=DEND_blk_type("Top")
+        #self.Top_Dish_End=DEND_blk_type("Top")
+        self.Top_Dish_End=DEND_crwn_petal_type("Top")
         self.VBox_all_grp_box_layout.addWidget(self.Top_Dish_End)
         
         self.VBox_all_grp_box_layout.addWidget(self.Bottom_DishEnd_selction)
         self.Bottom_Dish_End=DEND_blk_type("Bottom")     
         self.VBox_all_grp_box_layout.addWidget(self.Bottom_Dish_End)
         
-        # #As default DEND type on form load is 'BLANK' type for both top and bottom Dish End.
+        
         # dend_shape= self.Top_DishEnd_var_selction.cmbbox_d_end_shape_type.currentText()
-        # #pass on the DEND shape to the BLANK type as per combobox selection   
+        # #pass on the DEND shape to the Crown type and BLANK type as per combobox selection   
         # self.setShape_for_DEND(location='TOP',shape=dend_shape)     
       
     
@@ -151,9 +152,11 @@ class DEnd_selction(QWidget):#DISH END SELECTION GROUPBOX UI
         self.lbl_d_end_var_sel.setStyleSheet("background-color: lightgreen; font-weight: bold;")
         self.cmbbox_DEnd_var_sel=QComboBox()
         type_list=['Blank','Crown and Petal']
-        self.cmbbox_DEnd_var_sel.addItems(type_list)
+        self.cmbbox_DEnd_var_sel.addItems(type_list)        
         #self.cmbbox_DEnd_var_sel.currentIndexChanged.connect(self.SetUI_asper_DEND)
         self.cmbbox_DEnd_var_sel.setStyleSheet("background-color: lightgrey; font-weight: bold;")
+        
+        
         
         
          #Dish End Shape Selection :-'Ellipsoidal'/'Tori Spherical'

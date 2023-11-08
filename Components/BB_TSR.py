@@ -23,11 +23,13 @@ class Tab_BB_TSR(QWidget):
         part2=Part2()
         pipe_devit=Pipe_Devit()
         manhole_devit=ManHole_Devit()
+        vaccum_stiffner=Vaccum_Stiffner()
         
         self.main_gridlayout.addWidget(part1,0,0,1,2)
         self.main_gridlayout.addWidget(part2,1,0,1,1)
         self.main_gridlayout.addWidget(pipe_devit,1,1,1,1)
         self.main_gridlayout.addWidget(manhole_devit,2,0,1,1)
+        self.main_gridlayout.addWidget(vaccum_stiffner,2,0,2,1)
         
         # self.Vbox_layout.addWidget(part1)
         # self.Vbox_layout.addWidget(part2)
@@ -920,6 +922,272 @@ class ManHole_Devit(QWidget):
         button.setStyleSheet("")
         button.setStyleSheet("background-color:lightgrey")       
          
+class Vaccum_Stiffner(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.InitializeUI()
+            
+    def InitializeUI(self):
+        self.set_ui_layout() 
+                      
+    def set_ui_layout(self):
+        self.grpbox=QGroupBox("Vaccum Stiffner")
+        self.grpbox.setFixedWidth(880)
+        self.grpbox.setStyleSheet(set_styles.ip_grpbox1_style)        
+        self.Vbox_layout=QVBoxLayout()
+        self.Vbox_layout.addWidget(self.grpbox)
+        self.setLayout(self.Vbox_layout)
+        
+        self.set_grpbox_UI()
+        
+        
+    def set_grpbox_UI(self):
+        
+        #Gridlayout
+        self.gridlayout=QGridLayout()
+        self.grpbox.setLayout(self.gridlayout)
+        
+        #Input
+        self.lbl_description =QLabel("Description")
+        self.lbl_description.setStyleSheet("font:bold")
+        self.tb_description =QLineEdit("Vaccum Stiffner")
+        self.tb_description.setStyleSheet("font:bold")
+        
+        self.lbl_density =QLabel("density")
+        self.tb_density=QLineEdit("7.85")
+        self.lbl_OD =QLabel("OD")
+        self.tb_OD =QLineEdit("2500")
+        self.lbl_ID=QLabel("ID")
+        self.tb_ID =QLineEdit("2300")        
+        self.lbl_thk =QLabel("Thk")
+        self.tb_thk = QLineEdit("16")        
+        self.lbl_No_of_segments =QLabel("No. of Segments")
+        self.tb_No_of_segments = QLineEdit("4") 
+        self.lbl_qty=QLabel("Quantity")
+        self.tb_qty =QLineEdit("1")
+        self.lbl_cutting_allwnc=QLabel("Cutting Allwnc")
+        self.tb_cutting_allwnc =QLineEdit("10")
+        
+        self.lbl_ring_plt_wdth=QLabel("Ring Plate Width")
+        self.tb_ring_plt_wdth =QLineEdit("XX")
+        self.lbl_ring_plt_len=QLabel("Ring Plate Length")
+        self.tb_ring_plt_len =QLineEdit("XX")       
+        self.lbl_ring_plt_Wt=QLabel("Ring Plate Wt.")
+        self.tb_ring_plt_Wt =QLineEdit("XX")
+        self.lbl_ring_plt_material=QLabel("S Ring Plate Wt.")
+        self.cmbbox_ring_plt_material =QComboBox()
+        self.cmbbox_ring_plt_material.addItems(var.master_mat_list)
+        self.btn_add_mat_ring=QPushButton("Add to BOM")
+        self.btn_add_mat_ring.clicked.connect(self.Add_material_to_BOM)        
+        self.lbl_ring_surfaceArea=QLabel("Ring Surface Area")
+        self.tb_ring_surfaceArea =QLineEdit("XX") 
+        self.btn_add_surfaceArea=QPushButton("Add to BOM")
+        self.btn_add_surfaceArea.clicked.connect(self.Add_surafceArea_to_BOM)              
+        self.lbl_ring_plt_BOM_Wt1=QLabel("Ring Plate Stiff BOM Wt.")
+        self.tb_ring_plt_BOM_Wt1 =QLineEdit("XX")
+        self.lbl_ring_plt_BOM_Wt2=QLabel("Ring Plate Stiff BOM Wt.")
+        self.tb_ring_plt_BOM_Wt2 =QLineEdit("XX")
+        self.lbl_ring_plt_BOM_Wt3=QLabel("Ring Plate Stiff BOM Wt.")
+        self.tb_ring_plt_BOM_Wt3 =QLineEdit("XX")
+       
+       
+        
+        disabled_tb_list=[self.tb_ring_plt_len,self.tb_ring_plt_wdth,
+                          self.tb_ring_plt_Wt,self.tb_ring_surfaceArea,self.tb_ring_plt_BOM_Wt1,
+                          self.tb_ring_plt_BOM_Wt2,self.tb_ring_plt_BOM_Wt3]
+        material_cmbbox_list=[self.cmbbox_ring_plt_material]
+        for cmbbox in material_cmbbox_list:
+            cmbbox.setStyleSheet("background-color:lightgreen;font:bold")
+        
+        for tb in disabled_tb_list:
+            tb.setEnabled(False)
+        
+        self.btn_calculate_wt=QPushButton("Calculate")
+        self.btn_calculate_wt.clicked.connect(self.Calculate_btn_clicked)
+        
+               
+        #Layout
+        
+        a=2
+        self.gridlayout.addWidget(self.lbl_description,a,1)
+        self.gridlayout.addWidget(self.tb_description,a,2)
+        
+        a=a+2
+        self.gridlayout.addWidget(self.lbl_density,a,0)
+        self.gridlayout.addWidget(self.tb_density,a,1)
+        self.gridlayout.addWidget(self.lbl_OD,a,2)
+        self.gridlayout.addWidget(self.tb_OD,a,3)
+        
+        a+=1
+        self.gridlayout.addWidget(self.lbl_ID,a,0)
+        self.gridlayout.addWidget(self.tb_ID,a,1)
+        self.gridlayout.addWidget(self.lbl_thk,a,2)
+        self.gridlayout.addWidget(self.tb_thk,a,3)
+        
+        a+=1
+        self.gridlayout.addWidget(self.lbl_No_of_segments,a,0)
+        self.gridlayout.addWidget(self.tb_No_of_segments,a,1)
+        self.gridlayout.addWidget(self.lbl_qty,a,2)
+        self.gridlayout.addWidget(self.tb_qty,a,3) 
+        
+        a+=1     
+        self.gridlayout.addWidget(self.lbl_cutting_allwnc,a,0)
+        self.gridlayout.addWidget(self.tb_cutting_allwnc,a,1)
+        
+        a=a+1
+        self.gridlayout.addItem(QSpacerItem(100,20),a,0)
+        
+        a=a+1
+        self.gridlayout.addWidget(self.btn_calculate_wt,a,2,Qt.AlignmentFlag.AlignHCenter)
+        
+        a=a+1
+        self.gridlayout.addItem(QSpacerItem(100,20),a,0)
+        
+         #Output Layout 
+        a=a+1           
+        self.gridlayout.addWidget(QLabel("Output"),a,0) 
+        
+        a=a+1
+        self.gridlayout.addWidget(self.lbl_ring_plt_wdth,a,0)
+        self.gridlayout.addWidget(self.tb_ring_plt_wdth,a,1)        
+        self.gridlayout.addWidget(self.lbl_ring_plt_len,a,2)
+        self.gridlayout.addWidget(self.tb_ring_plt_len,a,3)              
+        
+        
+        a=a+1        
+        self.gridlayout.addWidget(self.lbl_ring_plt_Wt,a,0)
+        self.gridlayout.addWidget(self.tb_ring_plt_Wt,a,1) 
+        self.gridlayout.addWidget(self.cmbbox_ring_plt_material,a,2)  
+        self.gridlayout.addWidget(self.btn_add_mat_ring,a,4)      
+        
+        a=a+1       
+        self.gridlayout.addWidget(self.lbl_ring_surfaceArea,a,0)
+        self.gridlayout.addWidget(self.tb_ring_surfaceArea,a,1)        
+        self.gridlayout.addWidget(self.lbl_ring_plt_BOM_Wt1,a,2)
+        self.gridlayout.addWidget(self.tb_ring_plt_BOM_Wt1,a,3) 
+        
+        a=a+1
+        self.gridlayout.addWidget(self.lbl_ring_plt_BOM_Wt2,a,0)
+        self.gridlayout.addWidget(self.tb_ring_plt_BOM_Wt2,a,1) 
+        self.gridlayout.addWidget(self.lbl_ring_plt_BOM_Wt3,a,2)
+        self.gridlayout.addWidget(self.tb_ring_plt_BOM_Wt3,a,3)  
+        self.gridlayout.addWidget(self.btn_add_surfaceArea,a,4)  
+        
+       
+        self.Set_all_TextBox_Width()
+        #self.btn_add_SurfaceArea.setFixedWidth(150)
+        # self.btn_calculate_wt.setFixedSize(150,30) 
+        self.tb_description.setFixedWidth(120)
+       
+        
+    def Set_all_TextBox_Width(self):
+        # Get the QGridLayout widget
+        #layout = self.findChild(QGridLayout)
+
+        # Iterate over all of the widgets in the QGridLayout
+        for i in range(self.gridlayout.rowCount()):
+            for j in range(self.gridlayout.columnCount()):
+                widget_item = self.gridlayout.itemAtPosition(i, j)
+                if widget_item is not None:
+                    widget = widget_item.widget()
+                    # If the widget is a QLineEdit widget, set its width
+                    if (isinstance(widget, QLineEdit) ):
+                        widget.setFixedWidth(80)
+                    if (isinstance(widget,QComboBox)):
+                        pass   
+                    elif(isinstance(widget,QPushButton)):                            
+                        widget.setStyleSheet("background-color:lightgray;")
+
+   
+    def Add_material_to_BOM(self):
+        _ProjectCOntroller=ProjectController()
+        #if(self.sender()==self.btn_add_mat_ring):           
+        _ProjectCOntroller.add_update_item(item='Ring plt for Vaccum Stiffner',item_name="Ring plt for Vaccum Stiffner",wt=self.tb_ring_plt_Wt.text(),material=self.cmbbox_ring_plt_material.currentText())
+        # elif(self.sender()==self.btn_add_surfaceArea):           
+        #     _ProjectCOntroller.add_update_item(item='Bolting Bar',item_name="Bolting Bar Downcomer",wt=self.tb_ring_plt_BOM_Wt2.text(),material=self.tb_ring_plt_BOM_Wt1.currentText())
+        self.change_button_color_green()
+    
+    
+    def Add_surafceArea_to_BOM(self):
+        _ProjectCOntroller=ProjectController()
+        #elif(self.sender()==self.btn_add_surfaceArea):           
+        _ProjectCOntroller.add_update_surface_area(item='Ring plt for Vaccum Stiffner',item_name="Ring plt for Vaccum Stiffner",surface_area=self.tb_ring_surfaceArea.text())
+        self.change_button_color_green()
+        
+    def Calculate_btn_clicked(self):        
+        self.density=float(self.tb_density.text())*0.000001
+        self.OD=float(self.tb_OD.text())
+        self.ID=float(self.tb_ID.text())
+        self.No_of_segments=int(self.tb_No_of_segments.text())
+        self.qty=int(self.tb_qty.text())
+        self.cutting_allwnc=float(self.tb_cutting_allwnc.text())
+        self.thk=float(self.tb_thk.text())
+        
+        
+        self.ring_plt_wdth=self.BasePlt_Size_Wd(self.No_of_segments,self.OD)
+        self.ring_plt_len=self.BasePlt_Size_QLg(self.No_of_segments,self.OD,self.ID,self.qty)+((self.No_of_segments*self.qty)*self.cutting_allwnc)
+        
+        self.ring_plt_Wt=round(self.ring_plt_len*self.ring_plt_wdth*self.thk*self.density,1)        
+        self.ring_plt_surfaceArea=round(((math.pi/4*(self.OD**2-self.ID**2)*2)+(math.pi*self.OD*self.thk))/(1000*1000)*self.qty,1)
+      
+        self.ring_BOM_Wt1=round(math.pi/4*(self.OD**2-self.ID**2)*self.thk*self.density,1)
+        self.ring_BOM_Wt2=round(math.pi/4*(self.ID**2-self.thk**2)*self.No_of_segments*self.density,1)
+        self.ring_BOM_Wt3=round(self.ring_BOM_Wt2*self.qty)
+        
+        
+        self.tb_ring_plt_wdth.setText(str(self.ring_plt_wdth))
+        self.tb_ring_plt_len.setText(str(self.ring_plt_len))        
+        self.tb_ring_plt_Wt.setText(str(self.ring_plt_Wt))
+        self.tb_ring_surfaceArea.setText(str(self.ring_plt_surfaceArea))
+        
+        self.tb_ring_plt_BOM_Wt1.setText(str(self.ring_BOM_Wt1))
+        self.tb_ring_plt_BOM_Wt2.setText(str(self.ring_BOM_Wt2))
+        self.tb_ring_plt_BOM_Wt3.setText(str(self.ring_BOM_Wt3))
+        
+        
+        
+     
+        #self.reset_button_color_default(self.btn_add_SurfaceArea) #Reset the color of Add Material to BOM as Weight value got changed.
+        
+    @staticmethod
+    def BasePlt_Size_Wd(n, OD):
+        # 'This Function is used to calculate the width required for the base plate development
+        # ' n = no. of Joints required, OD = Base Ring OD
+
+            T = 360 / (2 * n)
+            Pi = 22 / 7
+            R1 = (OD / 2) + 5
+            Wd = 2 * R1 * math.sin(T * Pi / 180)
+            return  round(Wd)
+    
+    @staticmethod
+    def BasePlt_Size_QLg(n, OD, ID, q):
+        #  'This Function is used to calculate the Length of plate required of the base plate development
+        # ' n = no. of Joints required, OD = Base Ring OD, ID = Base RIng ID
+            T = 360 / (2 * n)
+            Pi = 22 / 7
+            R1 = (OD / 2)
+            R2 = (ID / 2)
+            x = R2 * math.cos(T * Pi / 180)
+            y = R2 * math.sin(T * Pi / 180)
+            k = n * q
+            Lg = (R1 - x) + ((k - 1) * (math.sqrt(R1 ** 2 - y ** 2) - x))
+            return round(Lg)
+            
+      
+           
+    def roundup_to_next100(self,num):
+       return  math.ceil(num/100)*100
+        
+    def change_button_color_green(self):
+        button = self.sender()
+        button.setStyleSheet("background-color: green; color: white;")
+
+    #This Function reset the color of "button" passed as an argument.
+    def reset_button_color_default(self,button):
+        #button = self.sender()
+        button.setStyleSheet("")
+        button.setStyleSheet("background-color:lightgrey")       
                 
         
         

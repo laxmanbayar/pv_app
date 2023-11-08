@@ -18,6 +18,7 @@ from Components.Saddles import Tab_Saddles
 from Components.Fire_inslulation import Tab_Fire_Insl
 from Components.WireMesh_Demister import Tab_WireMesh_Demister
 from Components.BB_TSR import Tab_BB_TSR
+from Components.Nozzle import Tab_Nozzle
 
 
 
@@ -43,6 +44,7 @@ class MainTabPage(QWidget):
         Fire_Insl=Tab_Fire_Insl()
         WireMesh_Demister=Tab_WireMesh_Demister()
         BB_TSR=Tab_BB_TSR()
+        Nozzle=Tab_Nozzle()
         
         BOM_tab = Tab4_BOM()
         
@@ -58,6 +60,7 @@ class MainTabPage(QWidget):
         tab_widget.addTab(Fire_Insl, "Fire Insul.")
         tab_widget.addTab(WireMesh_Demister, "WireMesh Demister")
         tab_widget.addTab(BB_TSR, "BB TSR")
+        tab_widget.addTab(Nozzle, "Nozzle")
         
         tab_widget.addTab(Misc, "Misc.")
         tab_widget.addTab(BOM_tab, "BOM")

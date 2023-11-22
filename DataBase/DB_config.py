@@ -5,12 +5,13 @@ from sqlalchemy.ext.declarative import declarative_base
 
 class DB_config_class:
     config=dotenv_values('.env')
-    user=config['DB_USER']
-    pwd=config['DB_PASSWORD']
-    host=config['DB_HOST']
-    port=config['DB_PORT']
-    db_name=config['DB_NAME']
-    mode=config['MODE']
+    print(config)
+    user="pv_user"#config['DB_USER']
+    pwd="pv_user"#config['DB_PASSWORD']
+    host="10.9.204.19"#config['DB_HOST']
+    port=3307#config['DB_PORT']
+    db_name="PV_BOM"#config['DB_NAME']
+    mode="prod"#config['MODE']
     db_url=None
     if(mode=='prod'):
         db_url=f"mysql+pymysql://{user}:{pwd}@{host}:{port}/{db_name}"

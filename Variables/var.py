@@ -11,7 +11,7 @@ project_name="XXXXX XXXXX"
 #     "SURFACE_AREA":"XXXXXX"
 # }
 
-
+root_dir_path=""
 CRN_AND_PETEL_OP_PARMS_WITH_ALLWNC={
     "N":00,
     "A":00,

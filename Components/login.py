@@ -1,17 +1,21 @@
+#print("in login")
 import sys
 #from Components.welcome import WelcomePage
-from Components.Main_Tab import MainTabPage
+#from Components.Main_Tab import MainTabPage
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QHBoxLayout,QMainWindow
 from Calculation.abs_path import absolute_path
+#print("import 1 done")
 #from Variables.var import Variables 
 from Variables import var
 from DataBase.common_models import User
+#print("import 2 done")
 from DataBase.DB_config import DB_config_class
 from Controller.auth_controller import auth_user
 #from Controller.project_controller import create_project_op_tables
 from Components.project_selection import Project_Selection
+#print("import 3 done")
 
 
 
@@ -32,6 +36,7 @@ class LoginPage(QWidget): #QMainWIndow
         # Load organization image
         logo_path = absolute_path("Resources/Images/logo.jpg")
         pv_img_path =absolute_path("Resources/Images/PV1.jpg")
+        print("doneeee images")
         organization_image = QPixmap(logo_path)
         organization_img_label = QLabel(self)
         organization_img_label.setPixmap(organization_image)

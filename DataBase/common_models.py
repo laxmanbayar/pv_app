@@ -5,11 +5,12 @@ from dotenv import dotenv_values,load_dotenv
 import os
 import pandas as pd
 
-try:
-   from DataBase.DB_config import DB_config_class
-except Exception as e:
-   from DB_config import DB_config_class
+# try:
+#    from DataBase.DB_config import DB_config_class
+# except Exception as e:
+#    from DB_config import DB_config_class
 
+from .DB_config import DB_config_class
 
 
 
